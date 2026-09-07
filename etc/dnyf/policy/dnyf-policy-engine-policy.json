@@ -1,0 +1,171 @@
+{
+  "schema": "dnyf.policy.definition.v1",
+  "version": "1.0.0",
+  "policy_id": "dnyf-default-security-policy",
+  "mode": "default-deny",
+  "evaluation": {
+    "deny_precedence": true,
+    "fail_closed": true,
+    "unknown_fields_denied": true
+  },
+  "identity": {
+    "accepted_device_roles": [
+      "workstation",
+      "mobile",
+      "server",
+      "edge",
+      "dev",
+      "ai-node"
+    ],
+    "identity_required": true,
+    "cryptographic_identity_required": true
+  },
+  "trust": {
+    "required": true,
+    "accepted_states": [
+      "trusted"
+    ],
+    "self_trust": false,
+    "automatic_trust": false
+  },
+  "session": {
+    "required": true,
+    "accepted_states": [
+      "authenticated",
+      "active"
+    ],
+    "revoked_denied": true,
+    "replayed_denied": true
+  },
+  "capability": {
+    "required": true,
+    "freshness_required": true,
+    "maximum_age_seconds": 900,
+    "stale_capability_denied": true
+  },
+  "local_approval": {
+    "required": true,
+    "approved_value": true
+  },
+  "routes": {
+    "public": {
+      "GET": [
+        "/api/v1/health",
+        "/api/v1/info"
+      ]
+    },
+    "protected": {
+      "GET": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/pairing",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    }
+  },
+  "roles": {
+    "workstation": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/pairing",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    },
+    "mobile": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    },
+    "server": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/pairing",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    },
+    "edge": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    },
+    "dev": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    },
+    "ai-node": {
+      "allowed_protected_routes": [
+        "/api/v1/devices",
+        "/api/v1/services",
+        "/api/v1/capabilities",
+        "/api/v1/discovery",
+        "/api/v1/sessions",
+        "/api/v1/sync",
+        "/api/v1/transfer"
+      ]
+    }
+  },
+  "dangerous_operations": {
+    "execute": {
+      "allowed": false,
+      "reason": "remote execution is globally disabled"
+    },
+    "install": {
+      "allowed": false,
+      "reason": "remote installation is globally disabled"
+    },
+    "shell": {
+      "allowed": false,
+      "reason": "remote shell is globally disabled"
+    }
+  },
+  "explicit_denials": [
+    {
+      "method": "*",
+      "path": "/api/v1/execute",
+      "reason": "remote execution disabled"
+    },
+    {
+      "method": "*",
+      "path": "/api/v1/install",
+      "reason": "remote installation disabled"
+    },
+    {
+      "method": "*",
+      "path": "/api/v1/shell",
+      "reason": "remote shell disabled"
+    }
+  ]
+}

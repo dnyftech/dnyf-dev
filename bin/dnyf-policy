@@ -1,0 +1,74 @@
+#!/data/data/com.termux/files/usr/bin/node
+'use strict';
+
+const engine = require(
+  process.env.DNYF_POLICY_ENGINE_AUTHORITY ||
+  '/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/policy-engine/dnyf-policy-engine-authority.js'
+);
+
+const command = process.argv[2] || 'status';
+
+function print(value) {
+  process.stdout.write(
+    typeof value === 'string'
+      ? value + '\n'
+      : JSON.stringify(value, null, 2) + '\n'
+  );
+}
+
+switch (command) {
+  case 'status':
+    print(engine.status());
+    break;
+
+  case 'fingerprint':
+    print(engine.policyFingerprint());
+    break;
+
+  case 'policy':
+    print(engine.loadPolicy());
+    break;
+
+  case 'schema':
+    print(engine.loadSchema());
+    break;
+
+  case 'evaluate': {
+    const encoded = process.argv[3];
+
+    if (!encoded) {
+      process.stderr.write(
+        'Usage: dnyf-policy evaluate <json-request>\n'
+      );
+      process.exit(2);
+    }
+
+    let request;
+
+    try {
+      request = JSON.parse(encoded);
+    } catch (error) {
+      process.stderr.write(
+        'Invalid JSON request: ' + error.message + '\n'
+      );
+      process.exit(2);
+    }
+
+    print(engine.evaluate(request));
+    break;
+  }
+
+  case 'test':
+    print({
+      service: 'dnyf-policy-engine',
+      contract: 'dnyf.policy.decision.v1',
+      status: 'use phase9b validator for complete contract tests'
+    });
+    break;
+
+  default:
+    process.stderr.write(
+      'Usage: dnyf-policy {status|fingerprint|policy|schema|evaluate|test}\n'
+    );
+    process.exit(2);
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "dnyf.policy.engine.registry.v1",
+  "service_id": "dnyf-policy-engine",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "version": "1.0.0",
+  "api_version": "v1",
+  "transport": [
+    "local-process",
+    "http",
+    "https"
+  ],
+  "entrypoint": "opt/dnyf/runtime/policy-engine/dnyf-policy-engine-authority.js",
+  "cli": "bin/dnyf-policy",
+  "policy": "etc/dnyf/policy/dnyf-policy-engine-policy.json",
+  "schema_file": "etc/dnyf/policy/dnyf-policy-engine-schema.json",
+  "security": {
+    "default_deny": true,
+    "fail_closed": true,
+    "policy_integrity_required": true,
+    "grants_trust": false,
+    "grants_pairing": false,
+    "grants_execution": false,
+    "grants_installation": false,
+    "grants_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  }
+}

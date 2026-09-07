@@ -1,0 +1,64 @@
+{
+  "schema": "dnyf.policy.engine.schema.v1",
+  "version": "1.0.0",
+  "name": "dnyf-policy-engine",
+  "description": "Deterministic fail-closed authorization policy engine.",
+  "decision_states": [
+    "allow",
+    "deny"
+  ],
+  "evaluation_order": [
+    "request_shape",
+    "dangerous_operation_denial",
+    "identity",
+    "trust",
+    "session",
+    "capability",
+    "local_approval",
+    "route",
+    "method",
+    "resource",
+    "explicit_deny",
+    "explicit_allow",
+    "default_deny"
+  ],
+  "security": {
+    "default_deny": true,
+    "fail_closed": true,
+    "policy_integrity_required": true,
+    "decision_audit_required": true,
+    "explainability_required": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false,
+    "policy_engine_grants_trust": false,
+    "policy_engine_grants_pairing": false,
+    "policy_engine_bypasses_gateway": false,
+    "policy_engine_grants_execution": false
+  },
+  "authentication": {
+    "cryptographic_authentication_required": true,
+    "ed25519_required": true,
+    "proof_of_possession_required": true,
+    "timestamp_validation_required": true,
+    "nonce_validation_required": true,
+    "replay_protection_required": true
+  },
+  "authorization": {
+    "trust_required": true,
+    "session_required": true,
+    "capability_evaluation": true,
+    "local_approval_evaluation": true,
+    "route_evaluation": true,
+    "method_evaluation": true,
+    "resource_evaluation": true
+  },
+  "integrity": {
+    "algorithm": "SHA-256",
+    "canonicalization": "sorted-json-keys"
+  }
+}

@@ -3,6 +3,69 @@
   "version": 1,
   "services": [
     {
+      "service_id": "dnyf-api-gateway",
+      "name": "DNYF API Gateway",
+      "protocol": "dnyf-api-gateway/1",
+      "api_version": "v1",
+      "transport": [
+        "http",
+        "https",
+        "websocket"
+      ],
+      "base_path": "/api/v1",
+      "status": "active",
+      "authenticated": true,
+      "cryptographic_authentication": true,
+      "proof_of_possession": true,
+      "replay_protection": true,
+      "trust_required_for_protected_routes": true,
+      "authorization_required_for_protected_routes": true,
+      "self_trust": false,
+      "self_pairing": false,
+      "automatic_trust": false,
+      "remote_execution": false,
+      "remote_installation": false,
+      "remote_shell": false
+    },
+    {
+      "service_id": "dnyf-policy-engine",
+      "name": "DNYF Policy Engine",
+      "protocol": "dnyf-policy/1",
+      "api_version": "v1",
+      "version": "1.0.0",
+      "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+      "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+      "transport": [
+        "local-process",
+        "http",
+        "https"
+      ],
+      "status": "active",
+      "security": {
+        "default_deny": true,
+        "fail_closed": true,
+        "grants_trust": false,
+        "grants_pairing": false,
+        "grants_execution": false,
+        "grants_installation": false,
+        "grants_shell": false
+      }
+    },
+    {
+      "service_id": "dnyf-service-discovery",
+      "service_name": "DNYF Service Discovery Registry",
+      "protocol": "dnyf-service-discovery/1",
+      "api_version": "v1",
+      "transports": [
+        "local-process",
+        "http",
+        "https",
+        "websocket"
+      ],
+      "enabled": true,
+      "health": "local"
+    },
+    {
       "name": "dnyf-device",
       "port": 9092,
       "transport": "tcp"
@@ -41,45 +104,6 @@
       "name": "dnyf-sync",
       "port": 9445,
       "transport": "tcp"
-    },
-    {
-      "service_id": "dnyf-service-discovery",
-      "service_name": "DNYF Service Discovery Registry",
-      "protocol": "dnyf-service-discovery/1",
-      "api_version": "v1",
-      "transports": [
-        "local-process",
-        "http",
-        "https",
-        "websocket"
-      ],
-      "enabled": true,
-      "health": "local"
-    },
-    {
-      "service_id": "dnyf-api-gateway",
-      "name": "DNYF API Gateway",
-      "protocol": "dnyf-api-gateway/1",
-      "api_version": "v1",
-      "transport": [
-        "http",
-        "https",
-        "websocket"
-      ],
-      "base_path": "/api/v1",
-      "status": "active",
-      "authenticated": true,
-      "cryptographic_authentication": true,
-      "proof_of_possession": true,
-      "replay_protection": true,
-      "trust_required_for_protected_routes": true,
-      "authorization_required_for_protected_routes": true,
-      "self_trust": false,
-      "self_pairing": false,
-      "automatic_trust": false,
-      "remote_execution": false,
-      "remote_installation": false,
-      "remote_shell": false
     }
   ]
 }
