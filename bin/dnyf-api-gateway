@@ -1,0 +1,78 @@
+#!/data/data/com.termux/files/usr/bin/node
+'use strict';
+
+const gateway = require(
+  process.env.DNYF_GATEWAY_LIBRARY ||
+  `${process.env.HOME}/DNYF-DEV/opt/dnyf/runtime/api-gateway/dnyf-api-gateway-authority.js`
+);
+
+const command = process.argv[2] || 'status';
+
+function output(value) {
+  process.stdout.write(JSON.stringify(value, null, 2) + '\n');
+}
+
+switch (command) {
+  case 'status':
+    output(gateway.status());
+    break;
+
+  case 'health':
+    output(gateway.health());
+    break;
+
+  case 'info':
+    output(gateway.info());
+    break;
+
+  case 'routes':
+    output(gateway.routeCatalog());
+    break;
+
+  case 'devices':
+    output(gateway.devicesInfo());
+    break;
+
+  case 'services':
+    output(gateway.servicesInfo());
+    break;
+
+  case 'capabilities':
+    output(gateway.capabilitiesInfo());
+    break;
+
+  case 'discovery':
+    output(gateway.discoveryInfo());
+    break;
+
+  case 'pairing':
+    output(gateway.pairingInfo());
+    break;
+
+  case 'sessions':
+    output(gateway.sessionsInfo());
+    break;
+
+  case 'sync':
+    output(gateway.syncInfo());
+    break;
+
+  case 'transfer':
+    output(gateway.transferInfo());
+    break;
+
+  case 'test-route': {
+    const method = process.argv[3] || 'GET';
+    const pathname = process.argv[4] || '/api/v1/health';
+    output(gateway.route(method, pathname));
+    break;
+  }
+
+  default:
+    process.stderr.write(
+      'Usage: dnyf-api-gateway ' +
+      'status|health|info|routes|devices|services|capabilities|' +
+      'discovery|pairing|sessions|sync|transfer|test-route\n'
+    );
+    process.exit(2);
+}
