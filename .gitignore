@@ -1,60 +1,60 @@
 # ============================================================
-# DNYFTECH — DNYF-DEV SECURITY GITIGNORE
+# DNYFTECH — DNYF-DEV Git Security
 # ============================================================
 
-# Secrets / cryptographic private material
-**/private*
+# Cryptographic private material
+**/private-key*
 **/*private-key*
-**/*secret*
-**/*token*
-**/*password*
+**/private_key*
+**/*private_key*
 **/*.pem
 **/*.key
+**/*.p12
+**/*.pfx
 
-# Canonical identity private material
-opt/dnyf/runtime/secure/identity/private*
-opt/dnyf/runtime/secure/identity/*.pem
-opt/dnyf/runtime/secure/identity/*.key
-
-# Runtime state
+# Secure identity/runtime credentials
+opt/dnyf/runtime/secure/
 opt/dnyf/state/
-opt/dnyf/cache/
-opt/dnyf/runtime/cache/
+etc/dnyf/session/
+etc/dnyf/pairing/
 
-# Logs / temporary runtime data
-logs/
+# Authentication/session state
+**/identity.json
+**/*token*
+**/*secret*
+**/*credential*
+**/*credentials*
+**/*password*
+
+# Local caches
+**/peer-cache/
+**/cache/
+
+# Runtime-generated state
+**/logs/
 **/*.log
-**/*.tmp
-**/*.lock
 
-# Backups
+# Backups — keep these local
 backups/
+
+# Termux/local environment
+.env
+.env.*
+!.env.example
 
 # Node
 node_modules/
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
 
 # Python
 __pycache__/
 *.py[cod]
-.venv/
-venv/
 
-# Android / build output
-.gradle/
-build/
-dist/
-*.apk
-*.aab
-
-# OS/editor
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
-
-# Termux temporary files
+# Temporary files
+*.tmp
 *.swp
-*.swo
+*.bak
+.DS_Store
+
+# OS/runtime generated files
+*.pid
+*.sock
