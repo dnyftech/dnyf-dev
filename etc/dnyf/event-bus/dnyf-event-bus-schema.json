@@ -1,0 +1,60 @@
+{
+  "schema": "dnyf.event.bus.schema.v1",
+  "protocol": "dnyf-event-bus/1",
+  "version": "1.0.0",
+  "event_envelope": {
+    "required": [
+      "event_id",
+      "event_version",
+      "event_type",
+      "topic",
+      "source",
+      "device_id",
+      "sequence",
+      "timestamp",
+      "idempotency_key",
+      "payload"
+    ],
+    "event_id": "UUIDv4",
+    "event_version": "integer",
+    "sequence": "positive_integer",
+    "timestamp": "ISO-8601-UTC",
+    "idempotency_key": "opaque_string"
+  },
+  "transport": [
+    "local-process",
+    "http",
+    "https",
+    "websocket"
+  ],
+  "network": {
+    "ipv4": true,
+    "ipv6": true,
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true
+  },
+  "delivery": {
+    "durable": true,
+    "at_least_once": true,
+    "ordering": "per-topic-source",
+    "deduplication": true,
+    "replay_protection": true,
+    "bounded_queue": true
+  },
+  "security": {
+    "publisher_authentication_required": true,
+    "ed25519_required": true,
+    "policy_evaluation_required": true,
+    "trust_not_granted": true,
+    "authorization_not_granted": true,
+    "execution_not_granted": true,
+    "installation_not_granted": true,
+    "shell_not_granted": true,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "self_trust": false,
+    "self_pairing": false
+  }
+}

@@ -1,0 +1,9 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+
+ROOT="${DNYF_ROOT:-${HOME}/DNYF-DEV}"
+export DNYF_ROOT="${ROOT}"
+
+exec node \
+  "${ROOT}/opt/dnyf/runtime/event-bus/dnyf-event-bus-authority.js" \
+  "$@"

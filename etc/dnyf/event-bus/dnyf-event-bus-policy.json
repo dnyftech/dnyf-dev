@@ -1,0 +1,62 @@
+{
+  "schema": "dnyf.event.bus.policy.v1",
+  "policy_id": "dnyf-event-bus-default-security-policy",
+  "policy_version": "1.0.0",
+  "mode": "default-deny",
+  "limits": {
+    "max_payload_bytes": 262144,
+    "max_event_bytes": 524288,
+    "max_queue_events": 1000,
+    "max_topic_length": 160,
+    "max_event_type_length": 160,
+    "max_idempotency_length": 200,
+    "max_timestamp_age_seconds": 300,
+    "max_future_timestamp_seconds": 30
+  },
+  "topics": {
+    "allowed_prefixes": [
+      "dnyf.system.",
+      "dnyf.device.",
+      "dnyf.service.",
+      "dnyf.registry.",
+      "dnyf.capability.",
+      "dnyf.discovery.",
+      "dnyf.session.",
+      "dnyf.sync.",
+      "dnyf.transfer.",
+      "dnyf.ceezix."
+    ],
+    "denied_prefixes": [
+      "dnyf.exec.",
+      "dnyf.install.",
+      "dnyf.shell.",
+      "dnyf.privilege.",
+      "dnyf.trust.auto.",
+      "dnyf.pair.auto."
+    ]
+  },
+  "security": {
+    "default_deny": true,
+    "fail_closed": true,
+    "publisher_authentication_required": true,
+    "policy_engine_required": true,
+    "trusted_peer_required": true,
+    "session_required": true,
+    "capability_evaluation_required": true,
+    "local_approval_required": true,
+    "dangerous_event_topics_disabled": true,
+    "event_bus_grants_trust": false,
+    "event_bus_grants_authorization": false,
+    "event_bus_grants_execution": false,
+    "event_bus_grants_installation": false,
+    "event_bus_grants_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  }
+}

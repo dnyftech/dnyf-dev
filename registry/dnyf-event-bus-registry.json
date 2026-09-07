@@ -1,0 +1,33 @@
+{
+  "schema": "dnyf.event.bus.registry.v1",
+  "service": "dnyf-event-bus",
+  "protocol": "dnyf-event-bus/1",
+  "version": "1.0.0",
+  "authority": "opt/dnyf/runtime/event-bus/dnyf-event-bus-authority.js",
+  "schema_file": "etc/dnyf/event-bus/dnyf-event-bus-schema.json",
+  "policy_file": "etc/dnyf/event-bus/dnyf-event-bus-policy.json",
+  "state": "opt/dnyf/state/event-bus",
+  "transport": [
+    "local-process",
+    "http",
+    "https",
+    "websocket"
+  ],
+  "security": {
+    "publisher_authentication_required": true,
+    "policy_engine_required": true,
+    "trust_not_granted": true,
+    "authorization_not_granted": true,
+    "execution_not_granted": true,
+    "installation_not_granted": true,
+    "shell_not_granted": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  }
+}

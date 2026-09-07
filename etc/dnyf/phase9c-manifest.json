@@ -1,0 +1,44 @@
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "9C",
+  "name": "DNYF Event Bus",
+  "version": "1.0.0",
+  "status": "complete",
+  "depends_on": [
+    "9A",
+    "9B"
+  ],
+  "components": [
+    "event-schema",
+    "event-policy",
+    "event-authority",
+    "durable-journal",
+    "bounded-queue",
+    "deduplication",
+    "replay-protection",
+    "sequence-control",
+    "audit",
+    "cli",
+    "service-registry"
+  ],
+  "security": {
+    "default_deny": true,
+    "fail_closed": true,
+    "publisher_authentication_required": true,
+    "cryptographic_proof_required": true,
+    "policy_engine_required": true,
+    "trust_not_granted": true,
+    "authorization_not_granted": true,
+    "execution_not_granted": true,
+    "installation_not_granted": true,
+    "shell_not_granted": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  }
+}
