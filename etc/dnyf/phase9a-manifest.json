@@ -1,0 +1,46 @@
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "9A",
+  "name": "DNYF API Gateway",
+  "version": "1.0.0",
+  "status": "complete",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "api_version": "v1",
+  "base_path": "/api/v1",
+  "security": {
+    "cryptographic_authentication": true,
+    "proof_of_possession": true,
+    "replay_protection": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "gateway_grants_trust": false,
+    "gateway_grants_authorization": false
+  },
+  "routes": {
+    "public": [
+      "/api/v1/health",
+      "/api/v1/info"
+    ],
+    "authenticated": [
+      "/api/v1/devices",
+      "/api/v1/services",
+      "/api/v1/capabilities",
+      "/api/v1/discovery",
+      "/api/v1/pairing",
+      "/api/v1/sessions",
+      "/api/v1/sync",
+      "/api/v1/transfer"
+    ],
+    "disabled": [
+      "/api/v1/execute",
+      "/api/v1/install",
+      "/api/v1/shell"
+    ]
+  },
+  "backup": "/data/data/com.termux/files/home/DNYF-DEV/backups/phase9a-api-gateway/20260907T133138Z"
+}

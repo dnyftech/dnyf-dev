@@ -1,0 +1,44 @@
+{
+  "schema": "dnyf.api.gateway.schema.v1",
+  "version": "1.0.0",
+  "name": "dnyf-api-gateway",
+  "api_version": "v1",
+  "base_path": "/api/v1",
+  "transport": [
+    "http",
+    "https",
+    "websocket"
+  ],
+  "serialization": "json",
+  "network": {
+    "ipv4": true,
+    "ipv6": true,
+    "lan_preferred": true,
+    "offline_first": true,
+    "internet_fallback": true,
+    "relay_fallback": true
+  },
+  "authentication": {
+    "cryptographic_authentication": true,
+    "ed25519": true,
+    "proof_of_possession": true,
+    "timestamp_validation": true,
+    "nonce_validation": true,
+    "replay_protection": true
+  },
+  "authorization": {
+    "policy_engine_required_for_protected_routes": true,
+    "local_approval_required": true,
+    "trust_required_for_peer_routes": true
+  },
+  "security": {
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "gateway_grants_trust": false,
+    "gateway_grants_authorization": false
+  }
+}

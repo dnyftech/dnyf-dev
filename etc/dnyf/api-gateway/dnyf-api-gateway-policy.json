@@ -1,0 +1,42 @@
+{
+  "schema": "dnyf.api.gateway.policy.v1",
+  "version": "1.0.0",
+  "default_action": "deny",
+  "public_routes": [
+    "/api/v1/health",
+    "/api/v1/info"
+  ],
+  "authenticated_routes": [
+    "/api/v1/devices",
+    "/api/v1/services",
+    "/api/v1/capabilities",
+    "/api/v1/discovery",
+    "/api/v1/pairing",
+    "/api/v1/sessions",
+    "/api/v1/sync",
+    "/api/v1/transfer"
+  ],
+  "disabled_routes": [
+    "/api/v1/execute",
+    "/api/v1/install",
+    "/api/v1/shell"
+  ],
+  "requirements": {
+    "protected_routes_require_authentication": true,
+    "protected_routes_require_authorization": true,
+    "protected_routes_require_trust": true,
+    "replay_protection_required": true,
+    "timestamp_window_seconds": 300,
+    "nonce_required": true
+  },
+  "security": {
+    "gateway_can_create_trust": false,
+    "gateway_can_create_authorization": false,
+    "gateway_can_enable_remote_execution": false,
+    "gateway_can_enable_remote_installation": false,
+    "gateway_can_enable_remote_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  }
+}

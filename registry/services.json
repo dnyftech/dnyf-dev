@@ -55,6 +55,31 @@
       ],
       "enabled": true,
       "health": "local"
+    },
+    {
+      "service_id": "dnyf-api-gateway",
+      "name": "DNYF API Gateway",
+      "protocol": "dnyf-api-gateway/1",
+      "api_version": "v1",
+      "transport": [
+        "http",
+        "https",
+        "websocket"
+      ],
+      "base_path": "/api/v1",
+      "status": "active",
+      "authenticated": true,
+      "cryptographic_authentication": true,
+      "proof_of_possession": true,
+      "replay_protection": true,
+      "trust_required_for_protected_routes": true,
+      "authorization_required_for_protected_routes": true,
+      "self_trust": false,
+      "self_pairing": false,
+      "automatic_trust": false,
+      "remote_execution": false,
+      "remote_installation": false,
+      "remote_shell": false
     }
   ]
 }
