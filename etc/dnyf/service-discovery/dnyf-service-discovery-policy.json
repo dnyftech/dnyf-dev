@@ -1,0 +1,53 @@
+{
+  "schema": "dnyf.service.discovery.policy.v1",
+  "version": "1.0.0",
+  "freshness": {
+    "service_max_age_seconds": 900,
+    "stale_after_seconds": 300,
+    "peer_cache_max_age_seconds": 900,
+    "negative_cache_seconds": 60
+  },
+  "transport_preference": [
+    "local-process",
+    "http",
+    "https",
+    "websocket"
+  ],
+  "network_preference": [
+    "loopback",
+    "lan-ipv4",
+    "lan-ipv6",
+    "internet",
+    "relay"
+  ],
+  "discovery_methods": [
+    "local-registry",
+    "lan-registry",
+    "mdns-compatible",
+    "authenticated-peer-advertisement",
+    "relay"
+  ],
+  "compatibility": {
+    "require_common_protocol": true,
+    "require_common_api_version": true,
+    "require_common_transport": true,
+    "require_required_capabilities": true,
+    "allow_downgrade": false
+  },
+  "security": {
+    "authentication_required": true,
+    "proof_of_possession_required": true,
+    "trust_required_for_sensitive_operations": true,
+    "authorization_required_for_operations": true,
+    "discovery_never_grants_trust": true,
+    "discovery_never_grants_authorization": true
+  },
+  "forbidden": {
+    "self_trust": true,
+    "self_pairing": true,
+    "automatic_trust": true,
+    "remote_execution": true,
+    "remote_installation": true,
+    "remote_shell": true
+  }
+}

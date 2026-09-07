@@ -1,0 +1,43 @@
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "8J",
+  "name": "Service Discovery Registry",
+  "version": "1.0.0",
+  "timestamp": "20260907T114102Z",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "depends_on": [
+    "8H-unified-device-registry",
+    "8I-capability-negotiation"
+  ],
+  "artifacts": {
+    "schema": "etc/dnyf/service-discovery/dnyf-service-discovery-schema.json",
+    "policy": "etc/dnyf/service-discovery/dnyf-service-discovery-policy.json",
+    "authority": "opt/dnyf/runtime/service-discovery/dnyf-service-discovery-authority.js",
+    "cli": "bin/dnyf-service-discovery",
+    "local_record": "opt/dnyf/state/service-discovery/local-service-record.json",
+    "discovery_state": "opt/dnyf/state/service-discovery/local-discovery-state.json",
+    "registry": "registry/dnyf-service-discovery-registry.json"
+  },
+  "security": {
+    "authenticated_discovery": true,
+    "proof_of_possession": true,
+    "discovery_grants_trust": false,
+    "discovery_grants_authorization": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "network": {
+    "ipv4": true,
+    "ipv6": true,
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "mdns_compatible": true
+  }
+}

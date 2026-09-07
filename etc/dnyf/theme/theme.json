@@ -1,0 +1,27 @@
+{
+  "schema": "dnyf.theme.v1",
+  "name": "DNYFTECH Developer",
+  "brand": "DNYFTECH",
+  "platform": "DNYF OS",
+  "environment": "DNYF-DEV",
+  "ai_platform": "CEEZIX",
+  "accent": "cyan",
+  "primary": "cyan",
+  "secondary": "blue",
+  "success": "green",
+  "warning": "yellow",
+  "error": "red",
+  "info": "cyan",
+  "muted": "bright_black",
+  "text": "white",
+  "background": "black",
+  "fonts": {
+    "technical": "JetBrains Mono",
+    "interface": "Syne"
+  },
+  "terminal": {
+    "truecolor": true,
+    "unicode": true,
+    "bold": true
+  }
+}

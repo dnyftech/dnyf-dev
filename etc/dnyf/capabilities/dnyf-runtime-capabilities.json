@@ -1,0 +1,98 @@
+{
+  "schema": "dnyf.runtime.capabilities.v1",
+  "version": "1.0.0",
+  "device": {
+    "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+    "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23"
+  },
+  "platform": {
+    "os": "android",
+    "architecture": "arm64",
+    "node_platform": "android",
+    "node_architecture": "arm64",
+    "runtime": "node",
+    "node_version": "v26.4.0"
+  },
+  "cpu": {
+    "logical_cores": 1,
+    "normalized_logical_cores": 1
+  },
+  "memory": {
+    "memory_bytes": 2924003328
+  },
+  "resources": {
+    "logical_cores": 1,
+    "memory_bytes": 2924003328
+  },
+  "network": {
+    "ipv4": true,
+    "ipv6": true,
+    "dns": true,
+    "http": true,
+    "https": true,
+    "websocket": true,
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true
+  },
+  "transport": {
+    "local_process": true,
+    "http": true,
+    "https": true,
+    "websocket": true
+  },
+  "security": {
+    "ed25519": true,
+    "sha256": true,
+    "cryptographic_authentication": true,
+    "proof_of_possession": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  },
+  "execution": {
+    "local_process": true,
+    "artifact_inspection": true,
+    "metadata_analysis": true,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "tools": {
+    "available": [
+      "node",
+      "curl",
+      "openssl",
+      "tar",
+      "unzip",
+      "python3"
+    ]
+  },
+  "tool_availability": {
+    "node": true,
+    "curl": true,
+    "openssl": true,
+    "tar": true,
+    "unzip": true,
+    "git": false,
+    "wget": false,
+    "python3": true,
+    "zip": false,
+    "proot": false,
+    "ollama": false,
+    "java": false,
+    "javac": false
+  },
+  "protocol": {
+    "runtime_protocol": "dnyf-runtime/1",
+    "capability_protocol": "dnyf-capability/1",
+    "api_versions": [
+      "v1"
+    ],
+    "protocol_versions": [
+      "1.0.0"
+    ]
+  },
+  "generated_at": "2026-09-07T11:11:23.452Z"
+}

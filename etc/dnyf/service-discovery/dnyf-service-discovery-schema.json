@@ -1,0 +1,52 @@
+{
+  "schema": "dnyf.service.discovery.v1",
+  "version": "1.0.0",
+  "description": "DNYFTECH authenticated service discovery and service registry contract",
+  "identity": {
+    "device_id_required": true,
+    "fingerprint_required": true,
+    "public_key_required": true
+  },
+  "service": {
+    "service_id_required": true,
+    "service_name_required": true,
+    "device_id_required": true,
+    "protocol_required": true,
+    "api_version_required": true,
+    "transports_required": true,
+    "endpoints_required": true,
+    "capabilities_required": true,
+    "health_required": true,
+    "last_seen_required": true,
+    "expires_at_required": true
+  },
+  "discovery": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true,
+    "mdns_compatible": true,
+    "authenticated_peer_binding_required": true,
+    "freshness_required": true
+  },
+  "security": {
+    "authenticated_discovery_required": true,
+    "proof_of_possession_required": true,
+    "discovery_grants_trust": false,
+    "discovery_grants_authorization": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "compatibility": {
+    "protocol_version_required": true,
+    "api_version_required": true,
+    "capability_filtering_required": true,
+    "transport_intersection_required": true
+  }
+}

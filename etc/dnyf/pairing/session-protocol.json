@@ -1,0 +1,20 @@
+{
+  "schema": "dnyf.session.v1",
+  "protocol": "dnyf-session/1",
+  "transport": "HTTP bootstrap",
+  "signature_algorithm": "Ed25519",
+  "hash": "SHA-256",
+  "session_ttl_seconds": 300,
+  "challenge_ttl_seconds": 120,
+  "clock_skew_seconds": 300,
+  "nonce_bytes": 32,
+  "replay_protection": true,
+  "local_approval_required": true,
+  "automatic_trust": false,
+  "self_pairing": false,
+  "self_trust": false,
+  "signed_confirmation": true,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

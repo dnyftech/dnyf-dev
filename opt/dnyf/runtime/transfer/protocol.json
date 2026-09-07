@@ -1,0 +1,12 @@
+{
+  "schema": "dnyf.transfer.v1",
+  "protocol": "dnyf-transfer/1",
+  "chunk_size": 1048576,
+  "resume": true,
+  "sha256": true,
+  "atomic_writes": true,
+  "cryptographic_authentication": true,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

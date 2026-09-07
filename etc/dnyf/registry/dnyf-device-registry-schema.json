@@ -1,0 +1,30 @@
+{
+  "schema": "dnyf.device.registry.v1",
+  "version": "1.0.0",
+  "registry": "dnyf-unified-device-registry",
+  "identity": {
+    "device_id": "required",
+    "fingerprint": "required",
+    "public_key": "required"
+  },
+  "domains": [
+    "identity",
+    "platform",
+    "capabilities",
+    "network",
+    "services",
+    "pairing",
+    "trust",
+    "session",
+    "revocation",
+    "protocols",
+    "audit"
+  ],
+  "security_separation": true,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

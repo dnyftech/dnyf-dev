@@ -1,0 +1,18 @@
+{
+  "schema": "dnyf.archive-theme.v1",
+  "brand": "DNYFTECH",
+  "archive_icon": "▤",
+  "zip_icon": "▥",
+  "archive_color": "01;31",
+  "backup_color": "01;35",
+  "formats": [
+    "zip",
+    "tar",
+    "tar.gz",
+    "tgz",
+    "7z"
+  ],
+  "naming": {
+    "pattern": "DNYF-<SYSTEM>-<COMPONENT>-<VERSION>-<DATE>.zip"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "schema": "dnyf.identity.v2",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "recorded_previous_fingerprint": "3b3cab3fec13f87ff4039d06851c0faeb8d968159cce88e7cde890c69bc539c9",
+  "key_algorithm": "Ed25519",
+  "identity_status": "reconstructed",
+  "private_key_recovered": false,
+  "new_key_required_if_original_key_is_lost": true
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "dnyf.security-policy.v1",
+  "cryptographic_authentication": true,
+  "algorithm": "Ed25519",
+  "hash": "SHA-256",
+  "self_trust": false,
+  "automatic_trust": false,
+  "local_approval_required": true,
+  "replay_protection": true,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

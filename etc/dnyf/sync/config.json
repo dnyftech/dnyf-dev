@@ -1,0 +1,22 @@
+{
+  "schema": "dnyf.sync.v1",
+  "algorithm": "SHA-256",
+  "mode": "bidirectional",
+  "offline_first": true,
+  "lan_first": true,
+  "internet_fallback": true,
+  "conflict_policy": "record-and-review",
+  "atomic_writes": true,
+  "exclude": [
+    ".git/",
+    "node_modules/",
+    ".next/",
+    "dist/",
+    "build/",
+    ".cache/",
+    "tmp/",
+    "var/tmp/",
+    "*.swap",
+    "*.log"
+  ]
+}

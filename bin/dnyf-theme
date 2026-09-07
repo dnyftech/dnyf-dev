@@ -1,0 +1,33 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+C='\033[1;36m'
+B='\033[1;34m'
+G='\033[1;32m'
+Y='\033[1;33m'
+R='\033[1;31m'
+M='\033[1;35m'
+W='\033[1;37m'
+X='\033[0m'
+
+printf "\n"
+printf "${C}◆ DNYFTECH${X}  ${W}Developer Environment${X}\n"
+printf "${C}◈ DNYF-DEV${X}   ${W}Filesystem${X}\n"
+printf "\n"
+
+printf "${C}▰${X} folders     "
+printf "${W}▱${X} files       "
+printf "${G}▶${X} executables\n"
+
+printf "${R}▤${X} archives    "
+printf "${M}✦${X} AI/CEEZIX   "
+printf "${Y}⚙${X} config\n"
+
+printf "${B}⌁${X} network      "
+printf "${G}✓${X} success     "
+printf "${R}✗${X} error\n"
+
+printf "\n"
+printf "Theme : DNYFTECH Developer\n"
+printf "Font  : JetBrains Mono\n"
+printf "UI    : Syne\n"
+printf "\n"

@@ -1,0 +1,25 @@
+{
+  "schema": "dnyf.runtime.manifest.v1",
+  "component": "universal-runtime",
+  "component_id": "dnyf-runtime-universal-v1",
+  "version": "1.0.0",
+  "files": [
+    "dnyf-runtime-platform-detector.js",
+    "dnyf-runtime-device-identity.js",
+    "dnyf-runtime-capability-detector.js",
+    "dnyf-runtime-artifact-manager.js",
+    "dnyf-runtime-dispatcher.js",
+    "dnyf-runtime-core.js"
+  ],
+  "windows": [
+    "dnyf-runtime-windows-artifact-adapter.js"
+  ],
+  "security": {
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  }
+}

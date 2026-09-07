@@ -1,0 +1,370 @@
+{
+  "schema": "dnyf.service.discovery.registry.v1",
+  "version": "1.0.0",
+  "generated_at": "2026-09-07T11:41:05.716Z",
+  "local_device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "local_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "discovery_policy": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true,
+    "mdns_compatible": true
+  },
+  "security": {
+    "discovered_is_not_authenticated": true,
+    "authenticated_is_not_trusted": true,
+    "trusted_is_not_authorized": true,
+    "authorized_is_not_remote_execution": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "devices": [
+    {
+      "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+      "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+      "public_key": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/secure/identity/device-ed25519-public.pem",
+      "source": "local-registry",
+      "authenticated": true,
+      "trusted": false,
+      "authorized": false,
+      "services": [
+        {
+          "service_id": "dnyf-dnyf-device",
+          "service_name": "dnyf-device",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.376Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.376Z",
+          "expires_at": "2026-09-07T11:56:04.376Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-discovery",
+          "service_name": "dnyf-discovery",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.397Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.397Z",
+          "expires_at": "2026-09-07T11:56:04.397Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-pairing",
+          "service_name": "dnyf-pairing",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.398Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.398Z",
+          "expires_at": "2026-09-07T11:56:04.398Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-trustd",
+          "service_name": "dnyf-trustd",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.398Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.398Z",
+          "expires_at": "2026-09-07T11:56:04.398Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-sessiond",
+          "service_name": "dnyf-sessiond",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.398Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.398Z",
+          "expires_at": "2026-09-07T11:56:04.398Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-secure",
+          "service_name": "dnyf-secure",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.398Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.398Z",
+          "expires_at": "2026-09-07T11:56:04.398Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-transfer",
+          "service_name": "dnyf-transfer",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.398Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.398Z",
+          "expires_at": "2026-09-07T11:56:04.398Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        },
+        {
+          "service_id": "dnyf-dnyf-sync",
+          "service_name": "dnyf-sync",
+          "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+          "device_fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+          "protocol": "dnyf/1",
+          "api_version": "v1",
+          "transports": [],
+          "endpoints": [],
+          "capabilities": [],
+          "health": {
+            "state": "unknown",
+            "last_check": "2026-09-07T11:41:04.399Z"
+          },
+          "discovery": {
+            "source": "local-registry",
+            "authenticated_peer_binding": true,
+            "network_preference": [
+              "loopback",
+              "lan-ipv4",
+              "lan-ipv6",
+              "internet",
+              "relay"
+            ],
+            "mdns_compatible": true
+          },
+          "last_seen": "2026-09-07T11:41:04.399Z",
+          "expires_at": "2026-09-07T11:56:04.399Z",
+          "security": {
+            "authenticated": true,
+            "proof_of_possession": true,
+            "grants_trust": false,
+            "grants_authorization": false,
+            "self_trust": false,
+            "self_pairing": false,
+            "automatic_trust": false,
+            "remote_execution": false,
+            "remote_installation": false,
+            "remote_shell": false
+          }
+        }
+      ]
+    }
+  ],
+  "peers": []
+}

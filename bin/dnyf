@@ -1,0 +1,48 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+ROOT="${DNYF_ROOT:-$HOME/DNYF-DEV}"
+
+case "${1:-help}" in
+
+    status)
+        echo "DNYFTECH DNYF-DEV"
+        echo
+        echo "Root:      $ROOT"
+        echo "Workspace: $ROOT/workspace"
+        echo "Device:    $(cat "$ROOT/etc/dnyf/device-id" 2>/dev/null || echo unknown)"
+        echo "Platform:  $(uname -m 2>/dev/null || echo unknown)"
+        echo
+        ;;
+
+    version)
+        echo "DNYF OS Developer Edition 1.0.0"
+        ;;
+
+    paths)
+        echo "ROOT=$ROOT"
+        echo "CONFIG=$ROOT/etc/dnyf"
+        echo "RUNTIME=$ROOT/opt/dnyf/runtime"
+        echo "STATE=$ROOT/opt/dnyf/state"
+        echo "WORKSPACE=$ROOT/workspace"
+        ;;
+
+    validate)
+        exec "$ROOT/scripts/validate.sh"
+        ;;
+
+    rebuild)
+        exec "$ROOT/scripts/rebuild-all.sh"
+        ;;
+
+    help|*)
+        echo "DNYF-DEV universal CLI"
+        echo
+        echo "Commands:"
+        echo "  dnyf status"
+        echo "  dnyf version"
+        echo "  dnyf paths"
+        echo "  dnyf validate"
+        echo "  dnyf rebuild"
+        echo "  dnyf help"
+        ;;
+esac

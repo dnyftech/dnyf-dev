@@ -1,0 +1,13 @@
+{
+  "schema": "dnyf.platform.v1",
+  "kernel": "Linux",
+  "architecture": "aarch64",
+  "architecture_family": "ARM64",
+  "host_runtime": "android-termux",
+  "universal_runtime": true,
+  "ipv4": true,
+  "ipv6": true,
+  "websocket": true,
+  "http": true,
+  "mdns": "optional"
+}

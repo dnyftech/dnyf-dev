@@ -1,0 +1,44 @@
+{
+  "schema": "dnyf.capability.policy.v1",
+  "policy_version": "1.0.0",
+  "identity": {
+    "device_id_required": true,
+    "fingerprint_required": true,
+    "identity_must_be_bound_to_offer": true
+  },
+  "authentication": {
+    "authenticated_exchange_required": true,
+    "proof_of_possession_required": true
+  },
+  "trust": {
+    "capabilities_do_not_create_trust": true,
+    "capabilities_do_not_modify_trust_registry": true,
+    "capabilities_do_not_approve_pairing": true
+  },
+  "authorization": {
+    "capability_match_is_not_authorization": true,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "network": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true
+  },
+  "freshness": {
+    "max_age_seconds": 900,
+    "stale_after_seconds": 300,
+    "stale_capabilities_must_not_be_used_for_security_decisions": true
+  },
+  "downgrade": {
+    "allowed_for_optional_capabilities": true,
+    "allowed_for_transport": true,
+    "allowed_for_api_version": true,
+    "allowed_for_feature_set": true,
+    "required_security_features_may_not_be_downgraded": true
+  }
+}

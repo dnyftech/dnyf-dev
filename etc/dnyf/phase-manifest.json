@@ -1,0 +1,88 @@
+{
+  "schema": "dnyf.phase-manifest.v1",
+  "system": "DNYF-DEV",
+  "platform": "DNYF OS",
+  "brand": "DNYFTECH",
+  "ai_platform": "CEEZIX",
+  "version": "1.0.0",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "phases": [
+    {
+      "id": "phase2",
+      "name": "Universal Runtime",
+      "status": "foundation",
+      "port": null,
+      "protocol": "dnyf-runtime/1"
+    },
+    {
+      "id": "phase3",
+      "name": "Device Daemon",
+      "status": "foundation",
+      "port": 9092,
+      "protocol": "dnyf-device/1"
+    },
+    {
+      "id": "phase4",
+      "name": "Discovery and Pairing",
+      "status": "foundation",
+      "ports": [9093, 9094],
+      "protocol": "dnyf-pairing/1"
+    },
+    {
+      "id": "phase5",
+      "name": "Secure API and Sync",
+      "status": "foundation",
+      "port": 9443,
+      "protocol": "dnyf-secure/1"
+    },
+    {
+      "id": "phase6",
+      "name": "Workspace Sync",
+      "status": "foundation",
+      "port": null,
+      "protocol": "dnyf-sync/1"
+    },
+    {
+      "id": "phase7",
+      "name": "File Transfer",
+      "status": "foundation",
+      "port": 9444,
+      "protocol": "dnyf-transfer/1"
+    },
+    {
+      "id": "phase8",
+      "name": "Cryptographic Trust and Sessions",
+      "status": "foundation",
+      "ports": [9096, 9097, 9445],
+      "protocols": [
+        "dnyf-cryptauth/1",
+        "dnyf-pairing/1",
+        "dnyf-session/1",
+        "dnyf-sync/1"
+      ]
+    },
+    {
+      "id": "phase8E",
+      "name": "Cryptographic Enforcement",
+      "status": "validated"
+    },
+    {
+      "id": "phase8F",
+      "name": "Cryptographic Pairing and Trust",
+      "status": "validated"
+    },
+    {
+      "id": "phase8G",
+      "name": "Authenticated Sessions",
+      "status": "partial"
+    }
+  ],
+  "security": {
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  }
+}

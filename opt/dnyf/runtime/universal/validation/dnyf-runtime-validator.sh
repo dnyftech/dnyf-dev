@@ -1,0 +1,1 @@
+/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/validation/dnyf-runtime-validator.sh

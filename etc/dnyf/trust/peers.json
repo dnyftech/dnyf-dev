@@ -1,0 +1,7 @@
+{
+  "schema": "dnyf.trust.v2",
+  "version": 2,
+  "local_device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "self_trust": false,
+  "peers": []
+}

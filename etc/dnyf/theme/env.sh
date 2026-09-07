@@ -1,0 +1,18 @@
+export DNYF_THEME="DNYFTECH Developer"
+export DNYF_ACCENT="cyan"
+export DNYF_FONT="JetBrains Mono"
+export DNYF_UI_FONT="Syne"
+
+export DNYF_COLOR_ROOT='\033[1;36m'
+export DNYF_COLOR_FOLDER='\033[1;36m'
+export DNYF_COLOR_FILE='\033[0;37m'
+export DNYF_COLOR_EXEC='\033[1;32m'
+export DNYF_COLOR_ARCHIVE='\033[1;31m'
+export DNYF_COLOR_CONFIG='\033[1;36m'
+export DNYF_COLOR_SOURCE='\033[1;33m'
+export DNYF_COLOR_AI='\033[1;35m'
+export DNYF_COLOR_ERROR='\033[1;31m'
+export DNYF_COLOR_WARNING='\033[1;33m'
+export DNYF_COLOR_SUCCESS='\033[1;32m'
+export DNYF_COLOR_INFO='\033[1;36m'
+export DNYF_COLOR_RESET='\033[0m'

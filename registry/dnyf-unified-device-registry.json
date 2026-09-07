@@ -1,0 +1,225 @@
+{
+  "schema": "dnyf.device.registry.v1",
+  "version": "1.0.0",
+  "registry_id": "dnyf-unified-device-registry",
+  "policy": {
+    "unknown_peers_default": "untrusted",
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "devices": {
+    "cbd06be57a51cb84e12b4e112a4d06e9": {
+      "schema": "dnyf.device.record.v1",
+      "version": "1.0.0",
+      "identity": {
+        "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+        "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+        "public_key": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/secure/identity/device-ed25519-public.pem",
+        "authority": "dnyf-cryptauth",
+        "canonical": true
+      },
+      "platform": {
+        "schema": "dnyf.runtime.platform.v1",
+        "runtime": "dnyf-universal-runtime/1",
+        "detected_at": "2026-09-07T08:16:49.703Z",
+        "host": "android-termux",
+        "architecture": "aarch64",
+        "kernel": {
+          "platform": "android",
+          "release": "5.15.180-android13-8-gb70ce4a70964-ab489",
+          "version": "#1 SMP PREEMPT Wed Jan 28 14:30:08 CST 2026",
+          "hostname": "localhost",
+          "arch": "aarch64",
+          "node": "v26.4.0"
+        },
+        "environment": {
+          "termux": true,
+          "proot": false,
+          "wsl": false,
+          "prefix": "/data/data/com.termux/files/usr",
+          "home": "/data/data/com.termux/files/home",
+          "shell": "/data/data/com.termux/files/usr/bin/bash"
+        },
+        "node_platform": "android",
+        "node_architecture": "arm64"
+      },
+      "capabilities": {
+        "schema": "dnyf.runtime.capabilities.v1",
+        "generated_at": "2026-09-07T08:16:50.336Z",
+        "cpu": {
+          "logical_cores": 0,
+          "architecture": "arm64"
+        },
+        "memory": {
+          "total_bytes": 2924003328
+        },
+        "filesystem": {
+          "node_fs": true,
+          "read_write": true,
+          "symlink": true,
+          "atomic_rename": true,
+          "sha256": true
+        },
+        "network": {
+          "tcp": true,
+          "ipv4": true,
+          "ipv6": true,
+          "websocket_runtime": true,
+          "dns": false
+        },
+        "tools": {
+          "node": true,
+          "git": false,
+          "curl": true,
+          "wget": false,
+          "openssl": false,
+          "python3": false,
+          "tar": true,
+          "unzip": true,
+          "zip": false,
+          "proot": false,
+          "proot_distro": false,
+          "ollama": false
+        },
+        "windows_compatibility": {
+          "artifact_storage": true,
+          "artifact_inspection": true,
+          "manifest_generation": true,
+          "native_execution": false,
+          "remote_execution": false,
+          "compatibility_execution": false,
+          "wine": false,
+          "box64": false,
+          "box86": false,
+          "qemu": false
+        },
+        "security": {
+          "cryptographic_identity": true,
+          "authenticated_protocol_available": true,
+          "self_trust": false,
+          "self_pairing": false,
+          "automatic_trust": false,
+          "remote_execution": false,
+          "remote_installation": false,
+          "remote_shell": false
+        }
+      },
+      "network": {
+        "discovery": {
+          "protocol": "dnyf-discovery/1",
+          "udp_port": 9093,
+          "enabled": true
+        },
+        "services": {
+          "device": 9092,
+          "trust": 9096,
+          "session": 9097,
+          "secure_api": 9443,
+          "transfer": 9444,
+          "sync": 9445
+        }
+      },
+      "services": {
+        "registry": {
+          "schema": "dnyf.service-registry.v1",
+          "version": 1,
+          "services": [
+            {
+              "name": "dnyf-device",
+              "port": 9092,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-discovery",
+              "port": 9093,
+              "transport": "udp"
+            },
+            {
+              "name": "dnyf-pairing",
+              "port": 9094,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-trustd",
+              "port": 9096,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-sessiond",
+              "port": 9097,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-secure",
+              "port": 9443,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-transfer",
+              "port": 9444,
+              "transport": "tcp"
+            },
+            {
+              "name": "dnyf-sync",
+              "port": 9445,
+              "transport": "tcp"
+            }
+          ]
+        }
+      },
+      "pairing": {
+        "protocol": "dnyf-pairing/1",
+        "local_approval_required": true,
+        "automatic_trust": false,
+        "self_pairing": false
+      },
+      "trust": {
+        "local_device_trusted": false,
+        "self_trust": false,
+        "peer_count": 0,
+        "source": "registry/trust.json"
+      },
+      "session": {
+        "protocol": "dnyf-session/1",
+        "authentication": "Ed25519",
+        "response_proof_required": true,
+        "replay_protection": true,
+        "local_approval_required": true,
+        "revocation_required": true
+      },
+      "revocation": {
+        "local_device_revoked": false,
+        "authority": "dnyf-session"
+      },
+      "protocols": {
+        "runtime": "dnyf-runtime/1",
+        "auth": "dnyf-cryptauth/1",
+        "pairing": "dnyf-pairing/1",
+        "session": "dnyf-session/1",
+        "discovery": "dnyf-discovery/1"
+      },
+      "security": {
+        "self_trust": false,
+        "self_pairing": false,
+        "automatic_trust": false,
+        "remote_execution": false,
+        "remote_installation": false,
+        "remote_shell": false
+      },
+      "audit": {
+        "created_at": "2026-09-07T11:02:35.326Z",
+        "updated_at": "2026-09-07T11:02:35.326Z",
+        "source": "phase8h-unified-device-registry"
+      }
+    }
+  },
+  "metadata": {
+    "device_count": 1,
+    "updated_at": "2026-09-07T11:02:35.959Z",
+    "authority": "dnyf-cryptauth"
+  }
+}

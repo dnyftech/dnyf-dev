@@ -1,0 +1,25 @@
+{
+  "schema": "dnyf.runtime.platform.v1",
+  "runtime": "dnyf-universal-runtime/1",
+  "detected_at": "2026-09-07T08:16:49.703Z",
+  "host": "android-termux",
+  "architecture": "aarch64",
+  "kernel": {
+    "platform": "android",
+    "release": "5.15.180-android13-8-gb70ce4a70964-ab489",
+    "version": "#1 SMP PREEMPT Wed Jan 28 14:30:08 CST 2026",
+    "hostname": "localhost",
+    "arch": "aarch64",
+    "node": "v26.4.0"
+  },
+  "environment": {
+    "termux": true,
+    "proot": false,
+    "wsl": false,
+    "prefix": "/data/data/com.termux/files/usr",
+    "home": "/data/data/com.termux/files/home",
+    "shell": "/data/data/com.termux/files/usr/bin/bash"
+  },
+  "node_platform": "android",
+  "node_architecture": "arm64"
+}

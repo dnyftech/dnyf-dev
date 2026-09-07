@@ -1,0 +1,18 @@
+{
+  "schema": "dnyf.auth.v1",
+  "protocol": "dnyf-cryptauth/1",
+  "algorithm": "Ed25519",
+  "hash": "SHA-256",
+  "canonicalization": "method + path + timestamp + nonce + body_hash",
+  "required_headers": [
+    "X-DNYF-Peer-Id",
+    "X-DNYF-Timestamp",
+    "X-DNYF-Nonce",
+    "X-DNYF-Body-SHA256",
+    "X-DNYF-Signature"
+  ],
+  "timestamp_window_seconds": 300,
+  "nonce_required": true,
+  "replay_protection": true,
+  "self_trust": false
+}

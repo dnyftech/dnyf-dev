@@ -1,0 +1,23 @@
+{
+  "schema": "dnyf.cryptographic-identity.v3",
+  "authority": "dnyf-cryptauth",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "algorithm": "Ed25519",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "public_key": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/secure/identity/device-ed25519-public.pem",
+  "private_key": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/secure/identity/device-ed25519-private.pem",
+  "identity_status": "active",
+  "generated_new_identity": true,
+  "generated_by_phase2": false,
+  "previous_fingerprint": "3b3cab3fec13f87ff4039d06851c0faeb8d968159cce88e7cde890c69bc539c9",
+  "previous_identity_status": "lost",
+  "previous_key_recovered": false,
+  "historical_key_usable": false,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false,
+  "created_at": "2026-09-07T08:38:05Z"
+}

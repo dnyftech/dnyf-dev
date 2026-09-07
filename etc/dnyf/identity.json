@@ -1,0 +1,22 @@
+{
+  "schema": "dnyf.identity.v3",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "recorded_previous_fingerprint": "3b3cab3fec13f87ff4039d06851c0faeb8d968159cce88e7cde890c69bc539c9",
+  "key_algorithm": "Ed25519",
+  "identity_status": "active",
+  "private_key_recovered": false,
+  "new_key_required_if_original_key_is_lost": false,
+  "algorithm": "Ed25519",
+  "identity_authority": "dnyf-cryptauth",
+  "generated_by_phase2": false,
+  "generated_new_identity": true,
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "public_key_authority": "dnyf-cryptauth",
+  "previous_fingerprint": "3b3cab3fec13f87ff4039d06851c0faeb8d968159cce88e7cde890c69bc539c9",
+  "previous_identity_status": "lost",
+  "historical_fingerprint": "3b3cab3fec13f87ff4039d06851c0faeb8d968159cce88e7cde890c69bc539c9",
+  "historical_key_usable": false,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false
+}

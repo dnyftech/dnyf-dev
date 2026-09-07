@@ -1,0 +1,60 @@
+{
+  "schema": "dnyf.service-registry.v1",
+  "version": 1,
+  "services": [
+    {
+      "name": "dnyf-device",
+      "port": 9092,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-discovery",
+      "port": 9093,
+      "transport": "udp"
+    },
+    {
+      "name": "dnyf-pairing",
+      "port": 9094,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-trustd",
+      "port": 9096,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-sessiond",
+      "port": 9097,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-secure",
+      "port": 9443,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-transfer",
+      "port": 9444,
+      "transport": "tcp"
+    },
+    {
+      "name": "dnyf-sync",
+      "port": 9445,
+      "transport": "tcp"
+    },
+    {
+      "service_id": "dnyf-service-discovery",
+      "service_name": "DNYF Service Discovery Registry",
+      "protocol": "dnyf-service-discovery/1",
+      "api_version": "v1",
+      "transports": [
+        "local-process",
+        "http",
+        "https",
+        "websocket"
+      ],
+      "enabled": true,
+      "health": "local"
+    }
+  ]
+}

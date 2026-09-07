@@ -1,0 +1,20 @@
+{
+  "schema": "dnyf.device.registry.policy.v1",
+  "version": "1.0.0",
+  "authoritative_identity_source": "opt/dnyf/runtime/secure/identity/identity.json",
+  "identity_mutation": false,
+  "key_generation": false,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "automatic_authorization": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false,
+  "trust_requires_pairing": true,
+  "session_requires_authentication": true,
+  "session_requires_local_approval": true,
+  "revocation_is_authoritative": true,
+  "audit_required": true,
+  "unknown_peers_default": "untrusted"
+}

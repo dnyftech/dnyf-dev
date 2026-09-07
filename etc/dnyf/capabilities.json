@@ -1,0 +1,36 @@
+{
+  "schema": "dnyf.capabilities.v1",
+  "device_roles": [
+    "mobile",
+    "workstation",
+    "server",
+    "edge",
+    "development",
+    "ai-node"
+  ],
+  "network": {
+    "http": true,
+    "https": true,
+    "websocket": true,
+    "ipv4": true,
+    "ipv6": true,
+    "mdns": "optional"
+  },
+  "security": {
+    "ed25519": true,
+    "sha256": true,
+    "replay_protection": true,
+    "authenticated_pairing": true
+  },
+  "storage": {
+    "file_transfer": true,
+    "workspace_sync": true,
+    "atomic_writes": true,
+    "sha256_integrity": true
+  },
+  "execution": {
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  }
+}

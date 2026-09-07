@@ -1,0 +1,32 @@
+{
+  "schema": "dnyf.transfer.v1",
+  "protocol": "dnyf-transfer/1",
+  "transport": "HTTPS",
+  "port": 9444,
+  "chunk_size": 1048576,
+  "resume": true,
+  "sha256": true,
+  "atomic_writes": true,
+  "cryptographic_authentication": true,
+  "request_signatures": true,
+  "replay_protection": true,
+  "trusted_peer_required": true,
+  "self_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false,
+  "operations": {
+    "upload": {
+      "start": "POST /transfer/upload/start",
+      "chunk": "PUT /transfer/upload/:id",
+      "complete": "POST /transfer/upload/:id/complete"
+    },
+    "download": {
+      "start": "POST /transfer/download/start",
+      "chunk": "GET /transfer/download/:id"
+    },
+    "status": {
+      "endpoint": "GET /transfer/session/:id"
+    }
+  }
+}

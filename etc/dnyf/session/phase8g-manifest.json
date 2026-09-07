@@ -1,0 +1,20 @@
+{
+  "schema": "dnyf.phase8g.manifest.v1",
+  "phase": "8G",
+  "component": "authenticated-sessions",
+  "version": "1.0.0",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "security": {
+    "response_proof": true,
+    "persistent_replay_protection": true,
+    "persistent_revocation": true,
+    "local_approval_required": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  }
+}

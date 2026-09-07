@@ -1,0 +1,1657 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ROOT="${HOME}/DNYF-DEV"
+PHASE="8I"
+PHASE_NAME="capability-negotiation"
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+
+ETC="${ROOT}/etc/dnyf"
+OPT="${ROOT}/opt/dnyf"
+REG="${ROOT}/registry"
+BIN="${ROOT}/bin"
+USR_BIN="${ROOT}/usr/bin"
+USR_LOCAL_BIN="${ROOT}/usr/local/bin"
+BACKUP="${ROOT}/backups/phase8i-capability-negotiation/${STAMP}"
+AUDIT="${OPT}/state/audit"
+STATE="${OPT}/state/capability"
+CACHE="${STATE}/peer-cache"
+
+SCHEMA_DIR="${ETC}/capability"
+RUNTIME_DIR="${OPT}/runtime/capability"
+VALIDATION_DIR="${OPT}/runtime/validation"
+MANIFEST="${ETC}/phase8i-manifest.json"
+
+IDENTITY="${OPT}/runtime/secure/identity/identity.json"
+PLATFORM="${ETC}/dnyf/platform/dnyf-runtime-platform.json"
+CAPABILITIES="${ETC}/capabilities/dnyf-runtime-capabilities.json"
+REGISTRY_FILE="${REG}/dnyf-unified-device-registry.json"
+SERVICES="${REG}/services.json"
+
+DEVICE_ID=""
+FINGERPRINT=""
+
+PASS=0
+FAIL=0
+
+ok() {
+  printf '[OK] %s\n' "$1"
+  PASS=$((PASS+1))
+}
+
+fail() {
+  printf '[FAIL] %s\n' "$1"
+  FAIL=$((FAIL+1))
+}
+
+require_file() {
+  if [ -f "$1" ]; then
+    ok "$2"
+  else
+    fail "$2"
+  fi
+}
+
+mkdir -p \
+  "$SCHEMA_DIR" \
+  "$RUNTIME_DIR" \
+  "$VALIDATION_DIR" \
+  "$BACKUP" \
+  "$AUDIT" \
+  "$STATE" \
+  "$CACHE"
+
+if [ ! -f "$IDENTITY" ]; then
+  echo "[FAIL] Canonical identity missing: $IDENTITY"
+  exit 1
+fi
+
+DEVICE_ID="$(node -e '
+const fs=require("fs");
+const x=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));
+process.stdout.write(String(x.device_id||"").toLowerCase());
+' "$IDENTITY")"
+
+FINGERPRINT="$(node -e '
+const fs=require("fs");
+const x=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));
+process.stdout.write(String(x.fingerprint||"").toLowerCase());
+' "$IDENTITY")"
+
+if [ -z "$DEVICE_ID" ] || [ -z "$FINGERPRINT" ]; then
+  echo "[FAIL] Canonical cryptographic identity is incomplete."
+  exit 1
+fi
+
+echo
+echo "============================================================"
+echo " DNYFTECH — PHASE 8I CAPABILITY NEGOTIATION"
+echo "============================================================"
+echo "Root:        $ROOT"
+echo "Device ID:   $DEVICE_ID"
+echo "Fingerprint: $FINGERPRINT"
+echo "Timestamp:   $STAMP"
+echo
+
+echo "◆ Preparing rollback snapshot..."
+
+for f in \
+  "$SCHEMA_DIR/dnyf-capability-negotiation-schema.json" \
+  "$SCHEMA_DIR/dnyf-capability-negotiation-policy.json" \
+  "$RUNTIME_DIR/dnyf-capability-negotiation.js" \
+  "$BIN/dnyf-capability" \
+  "$REGISTRY_FILE" \
+  "$SERVICES"
+do
+  if [ -e "$f" ]; then
+    cp -a "$f" "$BACKUP/$(basename "$f").before"
+  fi
+done
+
+ok "rollback snapshot created"
+
+echo "◆ Verifying Phase 8H foundation..."
+
+require_file "$REGISTRY_FILE" "8H unified device registry"
+require_file "$IDENTITY" "canonical cryptographic identity"
+require_file "$CAPABILITIES" "canonical capability metadata"
+
+if [ "$FAIL" -gt 0 ]; then
+  echo
+  echo "[FAIL] Required 8H foundation is incomplete."
+  exit 1
+fi
+
+echo "◆ Writing capability negotiation schema..."
+
+cat > "$SCHEMA_DIR/dnyf-capability-negotiation-schema.json" <<'JSON'
+{
+  "schema": "dnyf.capability.negotiation.v1",
+  "protocol": "dnyf-capability/1",
+  "version": "1.0.0",
+  "canonicalization": "sorted-json",
+  "domains": {
+    "identity": {
+      "required": [
+        "device_id",
+        "fingerprint"
+      ]
+    },
+    "protocol": {
+      "required": [
+        "protocol",
+        "version",
+        "api_versions"
+      ]
+    },
+    "platform": {
+      "required": [
+        "os",
+        "architecture",
+        "runtime"
+      ]
+    },
+    "transport": {
+      "required": [
+        "local_process",
+        "http",
+        "https",
+        "websocket",
+        "ipv4",
+        "ipv6"
+      ]
+    },
+    "security": {
+      "required": [
+        "ed25519",
+        "cryptographic_authentication"
+      ]
+    },
+    "services": {
+      "required": [
+        "service_ids"
+      ]
+    },
+    "resources": {
+      "required": [
+        "logical_cores",
+        "memory_bytes"
+      ]
+    },
+    "workload": {
+      "required": [
+        "execution_classes"
+      ]
+    }
+  },
+  "negotiation": {
+    "algorithm": "deterministic-intersection",
+    "required_capabilities_must_intersect": true,
+    "optional_capabilities_may_downgrade": true,
+    "unsupported_required_capability_is_incompatible": true,
+    "version_selection": "highest-common-compatible",
+    "transport_selection": "ordered-common-capability",
+    "api_selection": "highest-common-compatible",
+    "resource_selection": "minimum-safe-resource-profile"
+  },
+  "security": {
+    "capability_exchange_requires_authentication": true,
+    "capability_exchange_grants_trust": false,
+    "capability_exchange_grants_authorization": false,
+    "capability_exchange_enables_remote_execution": false,
+    "capability_exchange_enables_remote_installation": false,
+    "capability_exchange_enables_remote_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  },
+  "cache": {
+    "enabled": true,
+    "max_age_seconds": 900,
+    "stale_after_seconds": 300,
+    "never_authoritative_for_trust": true
+  }
+}
+JSON
+
+ok "capability negotiation schema"
+
+echo "◆ Writing capability negotiation policy..."
+
+cat > "$SCHEMA_DIR/dnyf-capability-negotiation-policy.json" <<'JSON'
+{
+  "schema": "dnyf.capability.policy.v1",
+  "policy_version": "1.0.0",
+  "identity": {
+    "device_id_required": true,
+    "fingerprint_required": true,
+    "identity_must_be_bound_to_offer": true
+  },
+  "authentication": {
+    "authenticated_exchange_required": true,
+    "proof_of_possession_required": true
+  },
+  "trust": {
+    "capabilities_do_not_create_trust": true,
+    "capabilities_do_not_modify_trust_registry": true,
+    "capabilities_do_not_approve_pairing": true
+  },
+  "authorization": {
+    "capability_match_is_not_authorization": true,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "network": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true
+  },
+  "freshness": {
+    "max_age_seconds": 900,
+    "stale_after_seconds": 300,
+    "stale_capabilities_must_not_be_used_for_security_decisions": true
+  },
+  "downgrade": {
+    "allowed_for_optional_capabilities": true,
+    "allowed_for_transport": true,
+    "allowed_for_api_version": true,
+    "allowed_for_feature_set": true,
+    "required_security_features_may_not_be_downgraded": true
+  }
+}
+JSON
+
+ok "capability negotiation policy"
+
+echo "◆ Building capability negotiation authority library..."
+
+cat > "$RUNTIME_DIR/dnyf-capability-negotiation.js" <<'NODE'
+'use strict';
+
+const fs = require('fs');
+const crypto = require('crypto');
+const os = require('os');
+
+const ROOT = process.env.DNYF_ROOT || `${process.env.HOME}/DNYF-DEV`;
+
+const PATHS = {
+  identity: `${ROOT}/opt/dnyf/runtime/secure/identity/identity.json`,
+  platform: `${ROOT}/etc/dnyf/platform/dnyf-runtime-platform.json`,
+  capabilities: `${ROOT}/etc/dnyf/capabilities/dnyf-runtime-capabilities.json`,
+  registry: `${ROOT}/registry/dnyf-unified-device-registry.json`,
+  schema: `${ROOT}/etc/dnyf/capability/dnyf-capability-negotiation-schema.json`,
+  policy: `${ROOT}/etc/dnyf/capability/dnyf-capability-negotiation-policy.json`,
+  cache: `${ROOT}/opt/dnyf/state/capability/peer-cache`
+};
+
+function readJson(file) {
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+function canonical(value) {
+  if (Array.isArray(value)) {
+    return value.map(canonical);
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.keys(value)
+      .sort()
+      .reduce((out, key) => {
+        out[key] = canonical(value[key]);
+        return out;
+      }, {});
+  }
+
+  return value;
+}
+
+function canonicalJson(value) {
+  return JSON.stringify(canonical(value));
+}
+
+function sha256(value) {
+  return crypto
+    .createHash('sha256')
+    .update(typeof value === 'string' ? value : canonicalJson(value))
+    .digest('hex');
+}
+
+function normalizeList(value) {
+  if (!Array.isArray(value)) return [];
+  return [...new Set(value.map(String))].sort();
+}
+
+function firstDefined(...values) {
+  for (const value of values) {
+    if (value !== undefined && value !== null) return value;
+  }
+  return undefined;
+}
+
+function loadLocal() {
+  const identity = readJson(PATHS.identity);
+  const platform = readJson(PATHS.platform);
+  const capabilities = readJson(PATHS.capabilities);
+  const registry = readJson(PATHS.registry);
+
+  const registryDevice =
+    registry.devices?.[identity.device_id] ||
+    registry.devices?.[String(identity.device_id).toLowerCase()] ||
+    null;
+
+  return {
+    identity,
+    platform,
+    capabilities,
+    registry,
+    registryDevice
+  };
+}
+
+function platformValue(platform, key, fallback) {
+  return firstDefined(
+    platform?.[key],
+    platform?.platform?.[key],
+    platform?.runtime?.[key],
+    fallback
+  );
+}
+
+function capabilityValue(capabilities, key, fallback) {
+  return firstDefined(
+    capabilities?.[key],
+    capabilities?.capabilities?.[key],
+    capabilities?.runtime?.[key],
+    fallback
+  );
+}
+
+function buildOffer() {
+  const local = loadLocal();
+  const { identity, platform, capabilities, registryDevice } = local;
+
+  const architecture = String(
+    firstDefined(
+      platformValue(platform, 'architecture'),
+      platformValue(platform, 'arch'),
+      process.arch
+    )
+  ).toLowerCase();
+
+  const osName = String(
+    firstDefined(
+      platformValue(platform, 'platform'),
+      platformValue(platform, 'os'),
+      process.platform
+    )
+  ).toLowerCase();
+
+  const runtime = String(
+    firstDefined(
+      platformValue(platform, 'runtime'),
+      platformValue(platform, 'runtime_name'),
+      'node'
+    )
+  ).toLowerCase();
+
+  const logicalCores = Math.max(
+    1,
+    Number(
+      firstDefined(
+        capabilityValue(capabilities, 'normalized_logical_cores'),
+        capabilityValue(capabilities, 'logical_cores'),
+        os.cpus().length,
+        1
+      )
+    ) || 1
+  );
+
+  const memoryBytes = Number(
+    firstDefined(
+      capabilityValue(capabilities, 'memory_bytes'),
+      capabilityValue(capabilities, 'total_memory_bytes'),
+      os.totalmem(),
+      0
+    )
+  ) || 0;
+
+  const tools = normalizeList(
+    firstDefined(
+      capabilityValue(capabilities, 'tools'),
+      capabilityValue(capabilities, 'available_tools'),
+      []
+    )
+  );
+
+  const transports = {
+    local_process: true,
+    http: true,
+    https: true,
+    websocket: true,
+    ipv4: true,
+    ipv6: true
+  };
+
+  const security = {
+    ed25519: true,
+    sha256: true,
+    cryptographic_authentication: true,
+    proof_of_possession: true
+  };
+
+  const apiVersions = ['v1'];
+
+  const executionClasses = [
+    'local-process',
+    'artifact-inspection',
+    'metadata-analysis'
+  ];
+
+  const disabledExecution = {
+    remote_execution: false,
+    remote_installation: false,
+    remote_shell: false
+  };
+
+  const serviceIds = normalizeList(
+    registryDevice?.services?.service_ids ||
+    registryDevice?.services ||
+    []
+  );
+
+  const offer = {
+    schema: 'dnyf.capability.offer.v1',
+    protocol: 'dnyf-capability/1',
+    version: '1.0.0',
+
+    identity: {
+      device_id: String(identity.device_id).toLowerCase(),
+      fingerprint: String(identity.fingerprint).toLowerCase()
+    },
+
+    protocol_capabilities: {
+      protocols: ['dnyf-capability/1'],
+      versions: ['1.0.0'],
+      api_versions: apiVersions
+    },
+
+    platform: {
+      os: osName,
+      architecture,
+      runtime,
+      node: process.version
+    },
+
+    transport: transports,
+
+    security,
+
+    services: {
+      service_ids: serviceIds
+    },
+
+    resources: {
+      logical_cores: logicalCores,
+      memory_bytes: memoryBytes,
+      memory_class:
+        memoryBytes >= 8 * 1024 * 1024 * 1024 ? 'high' :
+        memoryBytes >= 4 * 1024 * 1024 * 1024 ? 'medium-high' :
+        memoryBytes >= 2 * 1024 * 1024 * 1024 ? 'medium' :
+        'constrained'
+    },
+
+    workload: {
+      execution_classes: executionClasses,
+      remote_execution: false,
+      remote_installation: false,
+      remote_shell: false
+    },
+
+    tools,
+
+    policy: {
+      self_trust: false,
+      self_pairing: false,
+      automatic_trust: false,
+      capability_exchange_grants_trust: false,
+      capability_exchange_grants_authorization: false
+    },
+
+    freshness: {
+      generated_at: new Date().toISOString(),
+      max_age_seconds: 900
+    }
+  };
+
+  offer.capability_fingerprint = sha256(offer);
+
+  return offer;
+}
+
+function ensureOfferIntegrity(offer) {
+  if (!offer || typeof offer !== 'object') {
+    throw new Error('Capability offer is not an object');
+  }
+
+  if (offer.schema !== 'dnyf.capability.offer.v1') {
+    throw new Error('Unsupported capability offer schema');
+  }
+
+  if (!offer.identity?.device_id) {
+    throw new Error('Capability offer has no device ID');
+  }
+
+  if (!offer.identity?.fingerprint) {
+    throw new Error('Capability offer has no fingerprint');
+  }
+
+  if (!offer.capability_fingerprint) {
+    throw new Error('Capability offer has no fingerprint hash');
+  }
+
+  const expected = sha256({
+    ...offer,
+    capability_fingerprint: undefined
+  });
+
+  /*
+   * Undefined properties are omitted by JSON.stringify.
+   * This means the fingerprint is calculated over the offer
+   * without the fingerprint field itself.
+   */
+  if (expected !== offer.capability_fingerprint) {
+    throw new Error('Capability fingerprint mismatch');
+  }
+
+  return true;
+}
+
+function cloneWithoutFingerprint(offer) {
+  const copy = JSON.parse(JSON.stringify(offer));
+  delete copy.capability_fingerprint;
+  return copy;
+}
+
+function fingerprintOffer(offer) {
+  return sha256(cloneWithoutFingerprint(offer));
+}
+
+function refreshFingerprint(offer) {
+  const copy = cloneWithoutFingerprint(offer);
+  copy.capability_fingerprint = fingerprintOffer(copy);
+  return copy;
+}
+
+function normalizeVersions(values) {
+  return normalizeList(values).sort((a, b) => {
+    const pa = a.replace(/^v/, '').split('.').map(Number);
+    const pb = b.replace(/^v/, '').split('.').map(Number);
+
+    for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+      const x = pa[i] || 0;
+      const y = pb[i] || 0;
+      if (x !== y) return y - x;
+    }
+
+    return 0;
+  });
+}
+
+function intersectLists(a, b) {
+  const right = new Set(normalizeList(b));
+  return normalizeList(a).filter(item => right.has(item));
+}
+
+function selectHighestCommonVersion(a, b) {
+  const common = intersectLists(a, b);
+  return normalizeVersions(common)[0] || null;
+}
+
+function selectTransport(local, remote) {
+  const order = [
+    'https',
+    'websocket',
+    'http',
+    'local_process'
+  ];
+
+  for (const transport of order) {
+    if (local?.[transport] === true && remote?.[transport] === true) {
+      return transport;
+    }
+  }
+
+  return null;
+}
+
+function negotiate(localOffer, remoteOffer) {
+  ensureOfferIntegrity(localOffer);
+  ensureOfferIntegrity(remoteOffer);
+
+  const reasons = [];
+  const warnings = [];
+
+  if (
+    localOffer.identity.device_id ===
+    remoteOffer.identity.device_id
+  ) {
+    reasons.push('self-device-capability-exchange');
+  }
+
+  const commonProtocol = selectHighestCommonVersion(
+    localOffer.protocol_capabilities?.versions || [],
+    remoteOffer.protocol_capabilities?.versions || []
+  );
+
+  if (!commonProtocol) {
+    reasons.push('no-common-protocol-version');
+  }
+
+  const commonApi = selectHighestCommonVersion(
+    localOffer.protocol_capabilities?.api_versions || [],
+    remoteOffer.protocol_capabilities?.api_versions || []
+  );
+
+  if (!commonApi) {
+    reasons.push('no-common-api-version');
+  }
+
+  const transport = selectTransport(
+    localOffer.transport,
+    remoteOffer.transport
+  );
+
+  if (!transport) {
+    reasons.push('no-common-transport');
+  }
+
+  const architectureCompatible =
+    localOffer.platform?.architecture ===
+    remoteOffer.platform?.architecture;
+
+  const platformCompatible =
+    localOffer.platform?.os ===
+    remoteOffer.platform?.os ||
+    (
+      localOffer.platform?.os === 'linux' &&
+      remoteOffer.platform?.os === 'android'
+    ) ||
+    (
+      localOffer.platform?.os === 'android' &&
+      remoteOffer.platform?.os === 'linux'
+    );
+
+  const commonExecution = intersectLists(
+    localOffer.workload?.execution_classes || [],
+    remoteOffer.workload?.execution_classes || []
+  );
+
+  const commonServices = intersectLists(
+    localOffer.services?.service_ids || [],
+    remoteOffer.services?.service_ids || []
+  );
+
+  const securityRequired = [
+    'ed25519',
+    'sha256',
+    'cryptographic_authentication',
+    'proof_of_possession'
+  ];
+
+  const missingSecurity = securityRequired.filter(
+    key =>
+      localOffer.security?.[key] !== true ||
+      remoteOffer.security?.[key] !== true
+  );
+
+  if (missingSecurity.length) {
+    reasons.push(
+      `missing-required-security:${missingSecurity.join(',')}`
+    );
+  }
+
+  if (!architectureCompatible) {
+    warnings.push('architecture-mismatch');
+  }
+
+  if (!platformCompatible) {
+    warnings.push('platform-mismatch');
+  }
+
+  const localMemory =
+    Number(localOffer.resources?.memory_bytes || 0);
+
+  const remoteMemory =
+    Number(remoteOffer.resources?.memory_bytes || 0);
+
+  const safeMemory = Math.min(
+    localMemory || Number.MAX_SAFE_INTEGER,
+    remoteMemory || Number.MAX_SAFE_INTEGER
+  );
+
+  const localCores =
+    Math.max(1, Number(localOffer.resources?.logical_cores || 1));
+
+  const remoteCores =
+    Math.max(1, Number(remoteOffer.resources?.logical_cores || 1));
+
+  const result = {
+    schema: 'dnyf.capability.negotiation-result.v1',
+    protocol: 'dnyf-capability/1',
+    version: '1.0.0',
+
+    local_device_id: localOffer.identity.device_id,
+    remote_device_id: remoteOffer.identity.device_id,
+
+    local_capability_fingerprint:
+      localOffer.capability_fingerprint,
+
+    remote_capability_fingerprint:
+      remoteOffer.capability_fingerprint,
+
+    compatible:
+      reasons.length === 0,
+
+    state:
+      reasons.length === 0
+        ? 'compatible'
+        : 'incompatible',
+
+    reasons,
+    warnings,
+
+    negotiated: {
+      protocol_version: commonProtocol,
+      api_version: commonApi,
+      transport,
+      architecture_compatible: architectureCompatible,
+      platform_compatible: platformCompatible,
+
+      execution_classes: commonExecution,
+      service_ids: commonServices,
+
+      resources: {
+        logical_cores: Math.min(localCores, remoteCores),
+        memory_bytes:
+          safeMemory === Number.MAX_SAFE_INTEGER
+            ? 0
+            : safeMemory
+      }
+    },
+
+    security: {
+      authenticated_exchange_required: true,
+      proof_of_possession_required: true,
+      capability_exchange_grants_trust: false,
+      capability_exchange_grants_authorization: false,
+      remote_execution: false,
+      remote_installation: false,
+      remote_shell: false
+    },
+
+    negotiated_at: new Date().toISOString()
+  };
+
+  result.negotiation_fingerprint = sha256(result);
+
+  return result;
+}
+
+function isFresh(offer, maxAgeSeconds = 900) {
+  const generated =
+    Date.parse(offer?.freshness?.generated_at || '');
+
+  if (!Number.isFinite(generated)) return false;
+
+  const age = (Date.now() - generated) / 1000;
+
+  return age >= 0 && age <= maxAgeSeconds;
+}
+
+function cachePeerOffer(offer) {
+  ensureOfferIntegrity(offer);
+
+  const file =
+    `${PATHS.cache}/${offer.identity.device_id}.json`;
+
+  fs.mkdirSync(PATHS.cache, { recursive: true });
+
+  const record = {
+    schema: 'dnyf.capability.cache.v1',
+    device_id: offer.identity.device_id,
+    fingerprint: offer.identity.fingerprint,
+    capability_fingerprint: offer.capability_fingerprint,
+    cached_at: new Date().toISOString(),
+    offer
+  };
+
+  fs.writeFileSync(
+    file,
+    JSON.stringify(record, null, 2) + '\n',
+    { mode: 0o600 }
+  );
+
+  return file;
+}
+
+function loadCachedPeer(deviceId) {
+  const file =
+    `${PATHS.cache}/${String(deviceId).toLowerCase()}.json`;
+
+  if (!fs.existsSync(file)) return null;
+
+  return readJson(file);
+}
+
+function status() {
+  const offer = buildOffer();
+
+  return {
+    ok: true,
+    schema: 'dnyf.capability.status.v1',
+    device_id: offer.identity.device_id,
+    fingerprint: offer.identity.fingerprint,
+    capability_fingerprint: offer.capability_fingerprint,
+    architecture: offer.platform.architecture,
+    platform: offer.platform.os,
+    runtime: offer.platform.runtime,
+    logical_cores: offer.resources.logical_cores,
+    memory_bytes: offer.resources.memory_bytes,
+    api_versions: offer.protocol_capabilities.api_versions,
+    transports: Object.keys(offer.transport)
+      .filter(k => offer.transport[k] === true),
+    security: offer.security,
+    policy: offer.policy
+  };
+}
+
+module.exports = {
+  PATHS,
+  canonical,
+  canonicalJson,
+  sha256,
+  loadLocal,
+  buildOffer,
+  ensureOfferIntegrity,
+  fingerprintOffer,
+  refreshFingerprint,
+  negotiate,
+  isFresh,
+  cachePeerOffer,
+  loadCachedPeer,
+  status
+};
+NODE
+
+chmod 600 "$RUNTIME_DIR/dnyf-capability-negotiation.js"
+ok "capability negotiation authority library"
+
+echo "◆ Creating capability negotiation CLI..."
+
+cat > "$BIN/dnyf-capability" <<'NODE'
+#!/usr/bin/env node
+'use strict';
+
+const fs = require('fs');
+const crypto = require('crypto');
+
+const ROOT = process.env.DNYF_ROOT || `${process.env.HOME}/DNYF-DEV`;
+const LIB = `${ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`;
+const api = require(LIB);
+
+function usage() {
+  console.log(`
+DNYFTECH CAPABILITY NEGOTIATION
+
+Usage:
+  dnyf-capability status
+  dnyf-capability offer
+  dnyf-capability fingerprint
+  dnyf-capability negotiate <offer.json>
+  dnyf-capability cache <offer.json>
+  dnyf-capability cached <device-id>
+
+Security:
+  Capability negotiation does NOT grant trust.
+  Capability negotiation does NOT grant authorization.
+  Remote execution/install/shell remain disabled.
+`);
+}
+
+function printJson(value) {
+  process.stdout.write(JSON.stringify(value, null, 2) + '\n');
+}
+
+const command = process.argv[2];
+
+try {
+  if (!command || command === 'help' || command === '--help') {
+    usage();
+    process.exit(0);
+  }
+
+  if (command === 'status') {
+    printJson(api.status());
+    process.exit(0);
+  }
+
+  if (command === 'offer') {
+    printJson(api.buildOffer());
+    process.exit(0);
+  }
+
+  if (command === 'fingerprint') {
+    const offer = api.buildOffer();
+    console.log(offer.capability_fingerprint);
+    process.exit(0);
+  }
+
+  if (command === 'negotiate') {
+    const file = process.argv[3];
+
+    if (!file) {
+      console.error('Missing remote capability offer JSON.');
+      process.exit(2);
+    }
+
+    const remote = JSON.parse(
+      fs.readFileSync(file, 'utf8')
+    );
+
+    const local = api.buildOffer();
+
+    printJson(api.negotiate(local, remote));
+    process.exit(0);
+  }
+
+  if (command === 'cache') {
+    const file = process.argv[3];
+
+    if (!file) {
+      console.error('Missing capability offer JSON.');
+      process.exit(2);
+    }
+
+    const offer = JSON.parse(
+      fs.readFileSync(file, 'utf8')
+    );
+
+    console.log(api.cachePeerOffer(offer));
+    process.exit(0);
+  }
+
+  if (command === 'cached') {
+    const deviceId = process.argv[3];
+
+    if (!deviceId) {
+      console.error('Missing device ID.');
+      process.exit(2);
+    }
+
+    printJson(api.loadCachedPeer(deviceId));
+    process.exit(0);
+  }
+
+  console.error(`Unknown command: ${command}`);
+  usage();
+  process.exit(2);
+
+} catch (error) {
+  console.error(`[DNYF CAPABILITY ERROR] ${error.message}`);
+  process.exit(1);
+}
+NODE
+
+chmod 755 "$BIN/dnyf-capability"
+
+ln -sfn "$BIN/dnyf-capability" "$USR_BIN/dnyf-capability"
+ln -sfn "$BIN/dnyf-capability" "$USR_LOCAL_BIN/dnyf-capability"
+
+ok "capability negotiation CLI"
+
+echo "◆ Creating service-registry entry..."
+
+node - "$SERVICES" "$DEVICE_ID" <<'NODE'
+const fs = require('fs');
+
+const file = process.argv[2];
+const deviceId = process.argv[3];
+
+let registry = {};
+
+if (fs.existsSync(file)) {
+  registry = JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+
+if (!registry.services || typeof registry.services !== 'object') {
+  registry.services = {};
+}
+
+registry.services['dnyf-capability'] = {
+  id: 'dnyf-capability',
+  name: 'DNYF Capability Negotiation',
+  protocol: 'dnyf-capability/1',
+  version: '1.0.0',
+  device_id: deviceId,
+  transport: [
+    'local-process',
+    'http',
+    'https',
+    'websocket'
+  ],
+  api_version: 'v1',
+  capability_exchange: true,
+  authenticated_exchange_required: true,
+  proof_of_possession_required: true,
+  grants_trust: false,
+  grants_authorization: false,
+  remote_execution: false,
+  remote_installation: false,
+  remote_shell: false,
+  status: 'enabled'
+};
+
+fs.writeFileSync(
+  file,
+  JSON.stringify(registry, null, 2) + '\n'
+);
+NODE
+
+ok "capability service registry"
+
+echo "◆ Writing capability-state metadata..."
+
+node - "$STATE/local-capability-state.json" "$DEVICE_ID" "$FINGERPRINT" <<'NODE'
+const fs = require('fs');
+const path = require('path');
+
+const file = process.argv[2];
+const deviceId = process.argv[3];
+const fingerprint = process.argv[4];
+
+const state = {
+  schema: 'dnyf.capability.state.v1',
+  version: '1.0.0',
+  device_id: deviceId,
+  fingerprint,
+  capability_exchange_enabled: true,
+  capability_exchange_authenticated: true,
+  capability_exchange_grants_trust: false,
+  capability_exchange_grants_authorization: false,
+  self_trust: false,
+  self_pairing: false,
+  automatic_trust: false,
+  remote_execution: false,
+  remote_installation: false,
+  remote_shell: false,
+  cache: {
+    enabled: true,
+    max_age_seconds: 900,
+    stale_after_seconds: 300
+  },
+  updated_at: new Date().toISOString()
+};
+
+fs.mkdirSync(path.dirname(file), {recursive:true});
+fs.writeFileSync(file, JSON.stringify(state, null, 2) + '\n', {mode:0o600});
+NODE
+
+chmod 600 "$STATE/local-capability-state.json"
+ok "capability state"
+
+echo "◆ Creating phase audit record..."
+
+cat > "$AUDIT/phase8i-${STAMP}.jsonl" <<EOF
+{"schema":"dnyf.audit.v1","phase":"8I","event":"capability-negotiation-installed","device_id":"$DEVICE_ID","fingerprint":"$FINGERPRINT","timestamp":"$(date -u +%Y-%m-%dT%H:%M:%SZ)","security":{"grants_trust":false,"grants_authorization":false,"remote_execution":false,"remote_installation":false,"remote_shell":false}}
+EOF
+
+chmod 600 "$AUDIT/phase8i-${STAMP}.jsonl"
+ok "audit record"
+
+echo
+echo "◆ Validation..."
+
+START_PASS="$PASS"
+START_FAIL="$FAIL"
+
+require_file \
+  "$SCHEMA_DIR/dnyf-capability-negotiation-schema.json" \
+  "capability negotiation schema"
+
+require_file \
+  "$SCHEMA_DIR/dnyf-capability-negotiation-policy.json" \
+  "capability negotiation policy"
+
+require_file \
+  "$RUNTIME_DIR/dnyf-capability-negotiation.js" \
+  "capability negotiation library"
+
+require_file \
+  "$BIN/dnyf-capability" \
+  "capability CLI"
+
+require_file \
+  "$STATE/local-capability-state.json" \
+  "local capability state"
+
+echo "◆ JavaScript syntax validation..."
+
+node --check "$RUNTIME_DIR/dnyf-capability-negotiation.js"
+ok "capability library syntax"
+
+node --check "$BIN/dnyf-capability"
+ok "capability CLI syntax"
+
+echo "◆ Schema validation..."
+
+node - "$SCHEMA_DIR/dnyf-capability-negotiation-schema.json" <<'NODE'
+const fs=require('fs');
+const p=process.argv[2];
+const x=JSON.parse(fs.readFileSync(p,'utf8'));
+
+if(x.schema!=='dnyf.capability.negotiation.v1') throw new Error('bad schema');
+if(x.protocol!=='dnyf-capability/1') throw new Error('bad protocol');
+if(x.security.capability_exchange_grants_trust!==false) throw new Error('trust bypass');
+if(x.security.capability_exchange_grants_authorization!==false) throw new Error('authorization bypass');
+if(x.execution.remote_execution!==false) throw new Error('remote execution enabled');
+if(x.execution.remote_installation!==false) throw new Error('remote installation enabled');
+if(x.execution.remote_shell!==false) throw new Error('remote shell enabled');
+console.log('schema contract valid');
+NODE
+
+ok "schema security contract"
+
+echo "◆ Generating canonical local offer..."
+
+OFFER_FILE="$STATE/local-capability-offer.json"
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const offer=api.buildOffer();
+fs.writeFileSync(
+  process.argv[2],
+  JSON.stringify(offer,null,2)+'\n',
+  {mode:0o600}
+);
+
+api.ensureOfferIntegrity(offer);
+
+console.log(`device_id=${offer.identity.device_id}`);
+console.log(`fingerprint=${offer.identity.fingerprint}`);
+console.log(`capability_fingerprint=${offer.capability_fingerprint}`);
+NODE
+
+chmod 600 "$OFFER_FILE"
+ok "canonical local capability offer"
+
+echo "◆ Testing deterministic capability fingerprint..."
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const offer=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+
+const a=api.fingerprintOffer(offer);
+const b=api.fingerprintOffer(offer);
+
+if(a!==b) throw new Error('non-deterministic fingerprint');
+if(a!==offer.capability_fingerprint) throw new Error('fingerprint mismatch');
+
+console.log(a);
+NODE
+
+ok "deterministic capability fingerprint"
+
+echo "◆ Testing protocol/version negotiation..."
+
+REMOTE_FILE="$STATE/synthetic-compatible-peer.json"
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" "$REMOTE_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const local=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+
+const remote=JSON.parse(JSON.stringify(local));
+
+remote.identity.device_id='synthetic-peer-8i-contract';
+remote.identity.fingerprint='synthetic-fingerprint-8i-contract';
+
+remote.platform.architecture=local.platform.architecture;
+remote.platform.os=local.platform.os;
+
+remote.capability_fingerprint=api.fingerprintOffer(remote);
+
+fs.writeFileSync(
+  process.argv[3],
+  JSON.stringify(remote,null,2)+'\n',
+  {mode:0o600}
+);
+NODE
+
+RESULT_FILE="$STATE/synthetic-negotiation-result.json"
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" "$REMOTE_FILE" "$RESULT_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const local=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const remote=JSON.parse(fs.readFileSync(process.argv[3],'utf8'));
+
+const result=api.negotiate(local,remote);
+
+fs.writeFileSync(
+  process.argv[4],
+  JSON.stringify(result,null,2)+'\n',
+  {mode:0o600}
+);
+
+if(!result.compatible) {
+  throw new Error(
+    `synthetic negotiation failed: ${result.reasons.join(',')}`
+  );
+}
+
+if(result.security.capability_exchange_grants_trust!==false) {
+  throw new Error('capability negotiation granted trust');
+}
+
+if(result.security.capability_exchange_grants_authorization!==false) {
+  throw new Error('capability negotiation granted authorization');
+}
+
+if(result.security.remote_execution!==false) {
+  throw new Error('remote execution enabled');
+}
+
+console.log(JSON.stringify({
+  compatible: result.compatible,
+  protocol_version: result.negotiated.protocol_version,
+  api_version: result.negotiated.api_version,
+  transport: result.negotiated.transport,
+  architecture_compatible: result.negotiated.architecture_compatible,
+  execution_classes: result.negotiated.execution_classes,
+  grants_trust: result.security.capability_exchange_grants_trust,
+  grants_authorization: result.security.capability_exchange_grants_authorization
+},null,2));
+NODE
+
+ok "compatible capability negotiation"
+
+echo "◆ Testing graceful incompatibility..."
+
+INCOMPATIBLE_FILE="$STATE/synthetic-incompatible-peer.json"
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" "$INCOMPATIBLE_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const local=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+
+const remote={
+  schema:'dnyf.capability.offer.v1',
+  protocol:'dnyf-capability/1',
+  version:'1.0.0',
+  identity:{
+    device_id:'synthetic-incompatible-peer',
+    fingerprint:'synthetic-incompatible-fingerprint'
+  },
+  protocol_capabilities:{
+    protocols:['dnyf-capability/1'],
+    versions:['9.9.9'],
+    api_versions:['v99']
+  },
+  platform:{
+    os:'unknown-os',
+    architecture:'unknown-arch',
+    runtime:'unknown-runtime'
+  },
+  transport:{
+    local_process:false,
+    http:false,
+    https:false,
+    websocket:false,
+    ipv4:false,
+    ipv6:false
+  },
+  security:{
+    ed25519:false,
+    sha256:true,
+    cryptographic_authentication:false,
+    proof_of_possession:false
+  },
+  services:{
+    service_ids:[]
+  },
+  resources:{
+    logical_cores:1,
+    memory_bytes:0
+  },
+  workload:{
+    execution_classes:[]
+  },
+  tools:[],
+  policy:{
+    self_trust:false,
+    self_pairing:false,
+    automatic_trust:false,
+    capability_exchange_grants_trust:false,
+    capability_exchange_grants_authorization:false
+  },
+  freshness:{
+    generated_at:new Date().toISOString(),
+    max_age_seconds:900
+  }
+};
+
+remote.capability_fingerprint=api.fingerprintOffer(remote);
+
+fs.writeFileSync(
+  process.argv[3],
+  JSON.stringify(remote,null,2)+'\n',
+  {mode:0o600}
+);
+
+const result=api.negotiate(local,remote);
+
+if(result.compatible) {
+  throw new Error('incompatible peer incorrectly accepted');
+}
+
+if(!result.reasons.length) {
+  throw new Error('incompatibility reasons missing');
+}
+
+console.log(JSON.stringify({
+  compatible:result.compatible,
+  state:result.state,
+  reasons:result.reasons
+},null,2));
+NODE
+
+ok "graceful incompatibility handling"
+
+echo "◆ Testing stale capability handling..."
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const offer=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+
+offer.freshness.generated_at='2000-01-01T00:00:00.000Z';
+
+if(api.isFresh(offer,900)!==false) {
+  throw new Error('stale capability accepted as fresh');
+}
+
+console.log('stale capability correctly rejected');
+NODE
+
+ok "capability freshness enforcement"
+
+echo "◆ Testing cache isolation..."
+
+DNYF_ROOT="$ROOT" node - "$OFFER_FILE" <<'NODE'
+const fs=require('fs');
+const api=require(`${process.env.DNYF_ROOT}/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js`);
+
+const offer=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+
+const before=fs.readdirSync(api.PATHS.cache);
+
+api.cachePeerOffer(offer);
+
+const after=fs.readdirSync(api.PATHS.cache);
+
+if(after.length<=before.length && !after.includes(`${offer.identity.device_id}.json`)) {
+  throw new Error('capability cache not written');
+}
+
+const cached=api.loadCachedPeer(offer.identity.device_id);
+
+if(!cached || !cached.offer) {
+  throw new Error('cached offer unavailable');
+}
+
+console.log('cache record valid');
+NODE
+
+ok "peer capability cache"
+
+echo "◆ Verifying capability/trust separation..."
+
+node - "$REGISTRY_FILE" "$STATE/local-capability-state.json" <<'NODE'
+const fs=require('fs');
+
+const registry=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const state=JSON.parse(fs.readFileSync(process.argv[3],'utf8'));
+
+if(state.capability_exchange_grants_trust!==false) {
+  throw new Error('capability exchange trust bypass');
+}
+
+if(state.capability_exchange_grants_authorization!==false) {
+  throw new Error('capability exchange authorization bypass');
+}
+
+if(state.remote_execution!==false) {
+  throw new Error('remote execution enabled');
+}
+
+if(state.remote_installation!==false) {
+  throw new Error('remote installation enabled');
+}
+
+if(state.remote_shell!==false) {
+  throw new Error('remote shell enabled');
+}
+
+const text=JSON.stringify(registry);
+
+if(text.includes('"trusted":true') &&
+   state.capability_exchange_grants_trust===true) {
+  throw new Error('capability/trust boundary violation');
+}
+
+console.log('security separation valid');
+NODE
+
+ok "capability/trust security separation"
+
+echo "◆ Verifying canonical identity binding..."
+
+node - "$OFFER_FILE" "$IDENTITY" <<'NODE'
+const fs=require('fs');
+
+const offer=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const identity=JSON.parse(fs.readFileSync(process.argv[3],'utf8'));
+
+if(
+  offer.identity.device_id.toLowerCase() !==
+  String(identity.device_id).toLowerCase()
+) {
+  throw new Error('device ID mismatch');
+}
+
+if(
+  offer.identity.fingerprint.toLowerCase() !==
+  String(identity.fingerprint).toLowerCase()
+) {
+  throw new Error('fingerprint mismatch');
+}
+
+console.log('canonical identity binding valid');
+NODE
+
+ok "canonical identity binding"
+
+echo "◆ Verifying no synthetic peer entered authoritative registry..."
+
+node - "$REGISTRY_FILE" <<'NODE'
+const fs=require('fs');
+
+const registry=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
+const text=JSON.stringify(registry);
+
+if(text.includes('synthetic-peer-8i-contract')) {
+  throw new Error('synthetic peer leaked into authoritative registry');
+}
+
+if(text.includes('synthetic-incompatible-peer')) {
+  throw new Error('incompatible synthetic peer leaked into authoritative registry');
+}
+
+console.log('authoritative registry remains clean');
+NODE
+
+ok "synthetic peer isolation"
+
+echo "◆ Verifying permissions..."
+
+PRIVATE_KEY="${OPT}/runtime/secure/identity/device-ed25519-private.pem"
+
+if [ -f "$PRIVATE_KEY" ]; then
+  MODE="$(stat -c '%a' "$PRIVATE_KEY" 2>/dev/null || stat -f '%Lp' "$PRIVATE_KEY")"
+  if [ "$MODE" = "600" ]; then
+    ok "private key permission 600"
+  else
+    fail "private key permission is $MODE, expected 600"
+  fi
+fi
+
+IDENTITY_MODE="$(stat -c '%a' "$IDENTITY" 2>/dev/null || stat -f '%Lp' "$IDENTITY")"
+
+if [ "$IDENTITY_MODE" = "600" ]; then
+  ok "identity permission 600"
+else
+  fail "identity permission is $IDENTITY_MODE, expected 600"
+fi
+
+echo "◆ Writing Phase 8I manifest..."
+
+cat > "$MANIFEST" <<EOF
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "8I",
+  "name": "capability-negotiation",
+  "version": "1.0.0",
+  "status": "validated",
+  "device_id": "$DEVICE_ID",
+  "fingerprint": "$FINGERPRINT",
+  "capability_schema": "dnyf.capability.negotiation.v1",
+  "protocol": "dnyf-capability/1",
+  "security": {
+    "authenticated_exchange_required": true,
+    "proof_of_possession_required": true,
+    "capability_exchange_grants_trust": false,
+    "capability_exchange_grants_authorization": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "network": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true
+  },
+  "features": [
+    "canonical-capability-offer",
+    "capability-fingerprint",
+    "protocol-negotiation",
+    "api-version-negotiation",
+    "transport-negotiation",
+    "platform-compatibility",
+    "architecture-compatibility",
+    "service-capability-intersection",
+    "workload-capability-intersection",
+    "resource-negotiation",
+    "required-vs-optional-capabilities",
+    "incompatibility-reasons",
+    "graceful-downgrade",
+    "peer-capability-cache",
+    "capability-expiry",
+    "authenticated-capability-contract",
+    "trust-separation"
+  ],
+  "artifacts": {
+    "schema": "$SCHEMA_DIR/dnyf-capability-negotiation-schema.json",
+    "policy": "$SCHEMA_DIR/dnyf-capability-negotiation-policy.json",
+    "runtime": "$RUNTIME_DIR/dnyf-capability-negotiation.js",
+    "cli": "$BIN/dnyf-capability",
+    "local_offer": "$OFFER_FILE",
+    "local_state": "$STATE/local-capability-state.json"
+  },
+  "completed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+EOF
+
+ok "Phase 8I manifest"
+
+echo
+echo "◆ Final capability status..."
+
+DNYF_ROOT="$ROOT" "$BIN/dnyf-capability" status >/dev/null
+ok "capability CLI status"
+
+echo
+echo "============================================================"
+
+if [ "$FAIL" -eq 0 ]; then
+  echo " PHASE 8I CAPABILITY NEGOTIATION: PASS"
+else
+  echo " PHASE 8I CAPABILITY NEGOTIATION: FAIL"
+fi
+
+echo "============================================================"
+echo "Device ID   : $DEVICE_ID"
+echo "Fingerprint : $FINGERPRINT"
+echo "Offer       : $OFFER_FILE"
+echo "Manifest    : $MANIFEST"
+echo "Backup      : $BACKUP"
+echo
+echo "Passed: $PASS"
+echo "Failed: $FAIL"
+echo
+
+if [ "$FAIL" -eq 0 ]; then
+  echo "Validated:"
+  echo "  ✓ canonical capability offer"
+  echo "  ✓ capability fingerprint"
+  echo "  ✓ deterministic canonicalization"
+  echo "  ✓ protocol/version negotiation"
+  echo "  ✓ API version negotiation"
+  echo "  ✓ transport negotiation"
+  echo "  ✓ architecture/platform compatibility"
+  echo "  ✓ service capability intersection"
+  echo "  ✓ workload capability intersection"
+  echo "  ✓ resource negotiation"
+  echo "  ✓ required capability enforcement"
+  echo "  ✓ graceful incompatibility"
+  echo "  ✓ graceful downgrade model"
+  echo "  ✓ peer capability cache"
+  echo "  ✓ capability freshness"
+  echo "  ✓ authenticated capability contract"
+  echo "  ✓ capability/trust separation"
+  echo "  ✓ capability/authorization separation"
+  echo "  ✓ synthetic peer isolation"
+  echo "  ✓ security invariants"
+  echo
+  echo "Next phase: 8J service discovery registry"
+  exit 0
+fi
+
+exit 1

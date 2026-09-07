@@ -1,0 +1,65 @@
+# DNYFTECH COLOR SYSTEM
+
+# directories
+DIR 01;36
+
+# executable
+EXEC 01;32
+
+# symbolic links
+LINK 01;35
+
+# source
+.js 01;33
+.jsx 01;33
+.ts 01;33
+.tsx 01;33
+.py 01;33
+.java 01;33
+.c 01;33
+.cpp 01;33
+.h 01;33
+.hpp 01;33
+.go 01;33
+.rs 01;33
+.sh 01;32
+
+# web
+.html 01;34
+.css 01;34
+.svg 01;35
+.xml 01;34
+.json 01;36
+
+# configuration
+.conf 01;36
+.config 01;36
+.yaml 01;36
+.yml 01;36
+.env 01;31
+
+# documentation
+.md 01;37
+.txt 00;37
+.pdf 01;31
+
+# archives
+.zip 01;31
+.tar 01;31
+.tar.gz 01;31
+.tgz 01;31
+.7z 01;31
+.rar 01;31
+
+# images
+.png 01;35
+.jpg 01;35
+.jpeg 01;35
+.webp 01;35
+.gif 01;35
+
+# logs
+.log 00;33
+
+# DNYF
+.dnyf 01;36

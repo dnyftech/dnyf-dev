@@ -1,0 +1,30 @@
+{
+  "phase": "8H",
+  "name": "Unified Device Registry",
+  "schema": "dnyf.phase.v1",
+  "version": "1.0.0",
+  "status": "validated",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "registry": "registry/dnyf-unified-device-registry.json",
+  "identity_regeneration": false,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false,
+  "security_domains": [
+    "identity",
+    "platform",
+    "capabilities",
+    "network",
+    "services",
+    "pairing",
+    "trust",
+    "session",
+    "revocation",
+    "protocols",
+    "audit"
+  ]
+}

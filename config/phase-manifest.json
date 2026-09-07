@@ -1,0 +1,15 @@
+{
+  "schema": "dnyf.phase-manifest.v1",
+  "phase_2": "universal-runtime",
+  "phase_3": "device-daemon",
+  "phase_4": "discovery-pairing",
+  "phase_5": "secure-api",
+  "phase_6": "workspace-sync",
+  "phase_7": "file-transfer",
+  "phase_8e": "cryptographic-enforcement",
+  "phase_8f": "cryptographic-pairing-trust",
+  "phase_8g": "authenticated-sessions",
+  "phase_8h": "unified-device-registry",
+  "phase_8i": "capability-negotiation",
+  "phase_8j": "service-discovery"
+}

@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+"use strict";
+
+const registry = require(
+  require("path").join(
+    process.env.DNYF_ROOT || require("os").homedir() + "/DNYF-DEV",
+    "opt/dnyf/runtime/registry/dnyf-unified-device-registry.js"
+  )
+);
+
+const command = process.argv[2] || "status";
+
+switch (command) {
+  case "status": {
+    const r = registry.readRegistry();
+    console.log("DNYFTECH UNIFIED DEVICE REGISTRY");
+    console.log("--------------------------------");
+    console.log(`Schema:       ${r.schema}`);
+    console.log(`Version:      ${r.version}`);
+    console.log(`Registry:     ${r.registry_id}`);
+    console.log(`Devices:      ${r.metadata.device_count}`);
+    console.log(`Self-trust:   ${r.policy.self_trust}`);
+    console.log(`Self-pairing: ${r.policy.self_pairing}`);
+    console.log(`Auto-trust:   ${r.policy.automatic_trust}`);
+    break;
+  }
+
+  case "list": {
+    for (const d of registry.listDevices()) {
+      console.log(
+        `${d.identity.device_id}  ${d.platform.platform || d.platform.os || "unknown"}  ${d.identity.fingerprint}`
+      );
+    }
+    break;
+  }
+
+  case "show": {
+    const id = process.argv[3];
+    if (!id) {
+      console.error("Usage: dnyf-device-registry show <device-id>");
+      process.exit(2);
+    }
+
+    const device = registry.getDevice(id);
+
+    if (!device) {
+      console.error("[NOT FOUND] device");
+      process.exit(1);
+    }
+
+    console.log(JSON.stringify(device, null, 2));
+    break;
+  }
+
+  default:
+    console.log("Usage:");
+    console.log("  dnyf-device-registry status");
+    console.log("  dnyf-device-registry list");
+    console.log("  dnyf-device-registry show <device-id>");
+    process.exit(2);
+}

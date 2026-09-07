@@ -1,0 +1,25 @@
+{
+  "schema": "dnyf.runtime.protocol.v1",
+  "protocol": "dnyf-runtime/1",
+  "version": "1.0.0",
+  "transport": [
+    "local-process",
+    "http",
+    "https",
+    "websocket"
+  ],
+  "serialization": "json",
+  "api_version": "v1",
+  "ipv4": true,
+  "ipv6": true,
+  "offline_first": true,
+  "lan_preferred": true,
+  "internet_fallback": true,
+  "relay_fallback": true,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false
+}

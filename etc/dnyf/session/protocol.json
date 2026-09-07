@@ -1,0 +1,23 @@
+{
+  "schema": "dnyf.session.v1",
+  "protocol": "dnyf-session/1",
+  "version": "1.0.0",
+  "algorithm": "Ed25519",
+  "hash": "SHA-256",
+  "session_id_bytes": 32,
+  "nonce_bytes": 32,
+  "challenge_bytes": 32,
+  "timestamp_window_seconds": 300,
+  "session_ttl_seconds": 900,
+  "replay_protection": true,
+  "persistent_replay_state": true,
+  "local_approval_required": true,
+  "explicit_revocation_required": true,
+  "response_proof_required": true,
+  "self_trust": false,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

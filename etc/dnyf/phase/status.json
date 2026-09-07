@@ -1,0 +1,13 @@
+{
+  "schema": "dnyf.phase-status.v1",
+  "phase2": "foundation",
+  "phase3": "foundation",
+  "phase4": "foundation",
+  "phase5": "foundation",
+  "phase6": "foundation",
+  "phase7": "foundation",
+  "phase8": "foundation",
+  "phase8E": "validated",
+  "phase8F": "validated",
+  "phase8G": "partial"
+}

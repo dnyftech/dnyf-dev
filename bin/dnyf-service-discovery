@@ -1,0 +1,117 @@
+#!/data/data/com.termux/files/usr/bin/node
+'use strict';
+
+const fs=require('fs');
+const path=require('path');
+
+const ROOT=process.env.DNYF_ROOT || path.resolve(
+  process.env.HOME || process.cwd(),
+  'DNYF-DEV'
+);
+
+const lib=require(
+  path.join(ROOT,'opt/dnyf/runtime/service-discovery/dnyf-service-discovery-authority.js')
+);
+
+const command=process.argv[2] || 'status';
+
+function print(value) {
+  console.log(JSON.stringify(value,null,2));
+}
+
+function fail(message) {
+  console.error(`[FAIL] ${message}`);
+  process.exit(1);
+}
+
+try {
+  switch(command) {
+    case 'status':
+      print(lib.status());
+      break;
+
+    case 'services':
+      print({
+        schema:'dnyf.service.discovery.services.v1',
+        services:lib.enumerateLocalServices()
+      });
+      break;
+
+    case 'network':
+      print({
+        schema:'dnyf.service.discovery.network.v1',
+        ipv4:true,
+        ipv6:true,
+        mdns_compatible:true,
+        addresses:lib.detectNetworkInterfaces()
+      });
+      break;
+
+    case 'refresh':
+      print(lib.saveLocalRecord());
+      lib.saveRegistry();
+      break;
+
+    case 'registry':
+      print(lib.buildRegistry());
+      break;
+
+    case 'negotiate':
+      if(!process.argv[3]) fail('peer service JSON required');
+
+      const peer=JSON.parse(
+        fs.readFileSync(process.argv[3],'utf8')
+      );
+
+      const localServices=lib.enumerateLocalServices();
+      const peerServices=peer.services || [];
+
+      const results=[];
+
+      for(const local of localServices) {
+        for(const remote of peerServices) {
+          if(local.service_id===remote.service_id) {
+            results.push(
+              lib.negotiateService(local,remote)
+            );
+          }
+        }
+      }
+
+      print({
+        schema:'dnyf.service.discovery.negotiation.v1',
+        compatible:results.some(x=>x.compatible),
+        services:results
+      });
+      break;
+
+    case 'cache':
+      if(!process.argv[3]) fail('peer discovery JSON required');
+
+      const record=JSON.parse(
+        fs.readFileSync(process.argv[3],'utf8')
+      );
+
+      print({
+        cached:lib.cachePeer(record)
+      });
+      break;
+
+    default:
+      console.log(`
+DNYFTECH SERVICE DISCOVERY
+--------------------------
+Usage:
+  dnyf-service-discovery status
+  dnyf-service-discovery services
+  dnyf-service-discovery network
+  dnyf-service-discovery refresh
+  dnyf-service-discovery registry
+  dnyf-service-discovery negotiate <peer-record.json>
+  dnyf-service-discovery cache <peer-record.json>
+`);
+      process.exit(2);
+  }
+} catch(error) {
+  fail(error.message);
+}

@@ -1,0 +1,67 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -euo pipefail
+
+ROOT="${DNYF_ROOT:-$HOME/DNYF-DEV}"
+CORE="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-core.js"
+PLATFORM="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-platform-detector.js"
+CAPS="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-capability-detector.js"
+IDENTITY="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-device-identity.js"
+DISPATCH="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-dispatcher.js"
+ARTIFACT="$ROOT/opt/dnyf/runtime/universal/dnyf-runtime-artifact-manager.js"
+
+export DNYF_ROOT="$ROOT"
+
+case "${1:-info}" in
+    info)
+        exec node "$CORE"
+        ;;
+
+    platform)
+        exec node "$PLATFORM"
+        ;;
+
+    capabilities)
+        exec node "$CAPS"
+        ;;
+
+    identity)
+        exec node "$IDENTITY"
+        ;;
+
+    dispatch)
+        shift
+        exec node "$DISPATCH" "$@"
+        ;;
+
+    artifact)
+        shift
+        exec node "$ARTIFACT" "$@"
+        ;;
+
+    version)
+        printf '%s\n' 'DNYF Universal Runtime 1.0.0'
+        ;;
+
+    help|-h|--help)
+        cat <<'HELP'
+DNYF Universal Runtime
+
+Commands:
+  dnyf-runtime info
+  dnyf-runtime platform
+  dnyf-runtime capabilities
+  dnyf-runtime identity
+  dnyf-runtime dispatch <file>
+  dnyf-runtime artifact list
+  dnyf-runtime artifact inspect <file>
+  dnyf-runtime artifact store <file> [name]
+  dnyf-runtime version
+  dnyf-runtime help
+HELP
+        ;;
+
+    *)
+        printf 'Unknown runtime command: %s\n' "$1" >&2
+        exit 2
+        ;;
+esac

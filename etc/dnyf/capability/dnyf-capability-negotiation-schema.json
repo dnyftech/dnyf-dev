@@ -1,0 +1,87 @@
+{
+  "schema": "dnyf.capability.negotiation.v1",
+  "protocol": "dnyf-capability/1",
+  "version": "1.0.0",
+  "canonicalization": "sorted-json",
+  "domains": {
+    "identity": {
+      "required": [
+        "device_id",
+        "fingerprint"
+      ]
+    },
+    "protocol": {
+      "required": [
+        "protocol",
+        "version",
+        "api_versions"
+      ]
+    },
+    "platform": {
+      "required": [
+        "os",
+        "architecture",
+        "runtime"
+      ]
+    },
+    "transport": {
+      "required": [
+        "local_process",
+        "http",
+        "https",
+        "websocket",
+        "ipv4",
+        "ipv6"
+      ]
+    },
+    "security": {
+      "required": [
+        "ed25519",
+        "cryptographic_authentication"
+      ]
+    },
+    "services": {
+      "required": [
+        "service_ids"
+      ]
+    },
+    "resources": {
+      "required": [
+        "logical_cores",
+        "memory_bytes"
+      ]
+    },
+    "workload": {
+      "required": [
+        "execution_classes"
+      ]
+    }
+  },
+  "negotiation": {
+    "algorithm": "deterministic-intersection",
+    "required_capabilities_must_intersect": true,
+    "optional_capabilities_may_downgrade": true,
+    "unsupported_required_capability_is_incompatible": true,
+    "version_selection": "highest-common-compatible",
+    "transport_selection": "ordered-common-capability",
+    "api_selection": "highest-common-compatible",
+    "resource_selection": "minimum-safe-resource-profile"
+  },
+  "security": {
+    "capability_exchange_requires_authentication": true,
+    "capability_exchange_grants_trust": false,
+    "capability_exchange_grants_authorization": false,
+    "capability_exchange_enables_remote_execution": false,
+    "capability_exchange_enables_remote_installation": false,
+    "capability_exchange_enables_remote_shell": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  },
+  "cache": {
+    "enabled": true,
+    "max_age_seconds": 900,
+    "stale_after_seconds": 300,
+    "never_authoritative_for_trust": true
+  }
+}

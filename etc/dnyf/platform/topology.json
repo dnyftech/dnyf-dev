@@ -1,0 +1,31 @@
+{
+  "schema": "dnyf.filesystem.topology.v1",
+  "root": "/data/data/com.termux/files/home/DNYF-DEV",
+  "canonical_root": "/data/data/com.termux/files/home/DNYF-DEV",
+  "termux_prefix": "/data/data/com.termux/files/usr",
+  "termux_home": "/data/data/com.termux/files/home",
+  "android_shared": "/data/data/com.termux/files/home/storage/shared",
+  "ubuntu_proot_base": "/data/data/com.termux/files/usr/var/lib/proot-distro",
+  "ubuntu_root": "/data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/ubuntu",
+  "policy": {
+    "canonical_storage": "DNYF-DEV",
+    "allow_dangling_compatibility_links": true,
+    "allow_missing_ubuntu_links": true,
+    "allow_missing_android_storage_links": true,
+    "prevent_recursive_self_links": true,
+    "preserve_canonical_paths": true
+  },
+  "aliases": {
+    "dev": "workspace",
+    "runtime": "var",
+    "user": "home",
+    "apps-workspace": "workspace/apps",
+    "dnyf-apps": "opt/dnyf/apps",
+    "dnyf-engines": "opt/dnyf/engines",
+    "dnyf-models": "opt/dnyf/models",
+    "dnyf-packages": "opt/dnyf/packages",
+    "dnyf-runtime": "opt/dnyf/runtime",
+    "dnyf-state": "opt/dnyf/state",
+    "dnyf-workspace": "opt/dnyf/workspace"
+  }
+}

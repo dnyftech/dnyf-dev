@@ -1,0 +1,35 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+ROOT="${DNYF_ROOT:-$HOME/DNYF-DEV}"
+
+case "${1:-show}" in
+
+show)
+    printf '\033[1;36m◆ DNYFTECH FILESYSTEM TOPOLOGY\033[0m\n'
+    printf '\033[1;36m◈ Root:\033[0m %s\n' "$ROOT"
+    printf '\033[1;36m▣ Ubuntu:\033[0m %s\n' "$ROOT/compat/ubuntu/rootfs"
+    printf '\033[1;36m⌁ Android:\033[0m %s\n' "$ROOT/local/shared"
+    printf '\033[1;36m▤ Workspace:\033[0m %s\n' "$ROOT/workspace"
+    printf '\033[1;36m⚙ Runtime:\033[0m %s\n' "$ROOT/opt/dnyf/runtime"
+    printf '\033[1;36m⛨ Security:\033[0m %s\n' "$ROOT/etc/dnyf/security"
+    printf '\033[1;36m✦ CEEZIX:\033[0m %s\n' "$ROOT/opt/dnyf/runtime/ceezix"
+    ;;
+
+links)
+    find "$ROOT" -type l -printf '%p -> %l\n' 2>/dev/null
+    ;;
+
+dangling)
+    find "$ROOT" -type l ! -exec test -e {} \; -printf '%p -> %l\n' 2>/dev/null
+    ;;
+
+validate)
+    exec "$ROOT/scripts/validate-topology.sh"
+    ;;
+
+*)
+    printf 'Usage: dnyf-topology {show|links|dangling|validate}\n'
+    exit 1
+    ;;
+
+esac

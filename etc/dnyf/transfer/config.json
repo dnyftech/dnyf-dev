@@ -1,0 +1,15 @@
+{
+  "schema": "dnyf.transfer.config.v1",
+  "protocol": "dnyf-transfer/1",
+  "port": 9444,
+  "chunk_size": 1048576,
+  "max_transfer_size": 10737418240,
+  "resume": true,
+  "atomic_writes": true,
+  "sha256": true,
+  "require_trusted_peer": true,
+  "require_cryptographic_auth": true,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

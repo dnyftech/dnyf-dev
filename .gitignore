@@ -1,0 +1,60 @@
+# ============================================================
+# DNYFTECH — DNYF-DEV SECURITY GITIGNORE
+# ============================================================
+
+# Secrets / cryptographic private material
+**/private*
+**/*private-key*
+**/*secret*
+**/*token*
+**/*password*
+**/*.pem
+**/*.key
+
+# Canonical identity private material
+opt/dnyf/runtime/secure/identity/private*
+opt/dnyf/runtime/secure/identity/*.pem
+opt/dnyf/runtime/secure/identity/*.key
+
+# Runtime state
+opt/dnyf/state/
+opt/dnyf/cache/
+opt/dnyf/runtime/cache/
+
+# Logs / temporary runtime data
+logs/
+**/*.log
+**/*.tmp
+**/*.lock
+
+# Backups
+backups/
+
+# Node
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Android / build output
+.gradle/
+build/
+dist/
+*.apk
+*.aab
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Termux temporary files
+*.swp
+*.swo

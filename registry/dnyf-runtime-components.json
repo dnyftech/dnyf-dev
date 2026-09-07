@@ -1,0 +1,34 @@
+{
+  "schema": "dnyf.runtime.registry.v1",
+  "runtime": "dnyf-universal-runtime/1",
+  "components": {
+    "platform_detector": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-platform-detector.js",
+      "version": "1.0.0"
+    },
+    "identity_loader": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-device-identity.js",
+      "version": "1.0.0"
+    },
+    "capability_detector": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-capability-detector.js",
+      "version": "1.0.0"
+    },
+    "artifact_manager": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-artifact-manager.js",
+      "version": "1.0.0"
+    },
+    "dispatcher": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-dispatcher.js",
+      "version": "1.0.0"
+    },
+    "runtime_core": {
+      "file": "opt/dnyf/runtime/universal/dnyf-runtime-core.js",
+      "version": "1.0.0"
+    },
+    "windows_artifact_adapter": {
+      "file": "opt/dnyf/runtime/windows/dnyf-runtime-windows-artifact-adapter.js",
+      "version": "1.0.0"
+    }
+  }
+}

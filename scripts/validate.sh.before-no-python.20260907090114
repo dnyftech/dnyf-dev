@@ -1,0 +1,73 @@
+#!/data/data/com.termux/files/usr/bin/bash
+set -u
+
+ROOT="${DNYF_ROOT:-$HOME/DNYF-DEV}"
+FAIL=0
+
+check() {
+    if [ -e "$1" ]; then
+        echo "[OK]   $2"
+    else
+        echo "[FAIL] $2"
+        FAIL=1
+    fi
+}
+
+echo
+echo "============================================================"
+echo " DNYF-DEV FILESYSTEM VALIDATION"
+echo "============================================================"
+
+check "$ROOT/etc/os-release" "DNYF OS identity"
+check "$ROOT/etc/dnyf/device-id" "canonical device ID"
+check "$ROOT/etc/dnyf/identity.json" "identity metadata"
+check "$ROOT/etc/dnyf/platform.json" "platform metadata"
+check "$ROOT/etc/dnyf/capabilities.json" "capability registry"
+check "$ROOT/etc/dnyf/security-policy.json" "security policy"
+check "$ROOT/etc/dnyf/auth/protocol.json" "cryptographic auth protocol"
+check "$ROOT/etc/dnyf/pairing/config.json" "pairing configuration"
+check "$ROOT/etc/dnyf/pairing/session-protocol.json" "session protocol"
+check "$ROOT/etc/dnyf/sync/config.json" "sync configuration"
+check "$ROOT/etc/dnyf/trust/peers.json" "trust registry"
+check "$ROOT/registry/services.json" "service registry"
+check "$ROOT/config/phase-manifest.json" "phase manifest"
+check "$ROOT/opt/dnyf/runtime/transfer/protocol.json" "transfer protocol"
+check "$ROOT/bin/dnyf" "DNYF CLI"
+
+EXPECTED="cbd06be57a51cb84e12b4e112a4d06e9"
+ACTUAL="$(cat "$ROOT/etc/dnyf/device-id" 2>/dev/null || true)"
+
+if [ "$ACTUAL" = "$EXPECTED" ]; then
+    echo "[OK]   canonical device ID"
+else
+    echo "[FAIL] canonical device ID"
+    FAIL=1
+fi
+
+if python3 - "$ROOT/etc/dnyf/trust/peers.json" <<'PY'
+import json,sys
+p=json.load(open(sys.argv[1]))
+assert p["self_trust"] is False
+assert p["peers"] == []
+print("[OK]   self-trust disabled / peer registry empty")
+PY
+then
+    :
+else
+    echo "[FAIL] trust registry policy"
+    FAIL=1
+fi
+
+echo
+
+if [ "$FAIL" -eq 0 ]; then
+    echo "============================================================"
+    echo " VALIDATION: PASS"
+    echo "============================================================"
+else
+    echo "============================================================"
+    echo " VALIDATION: FAIL"
+    echo "============================================================"
+fi
+
+exit "$FAIL"

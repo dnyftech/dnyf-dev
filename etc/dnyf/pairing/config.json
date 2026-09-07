@@ -1,0 +1,16 @@
+{
+  "schema": "dnyf.pairing.config.v1",
+  "protocol": "dnyf-pairing/1",
+  "port": 9096,
+  "request_ttl_seconds": 600,
+  "approval_ttl_seconds": 600,
+  "fingerprint_algorithm": "sha256",
+  "key_algorithm": "Ed25519",
+  "require_local_approval": true,
+  "require_fingerprint_review": true,
+  "self_pairing": false,
+  "automatic_trust": false,
+  "remote_execution": false,
+  "remote_installation": false,
+  "remote_shell": false
+}

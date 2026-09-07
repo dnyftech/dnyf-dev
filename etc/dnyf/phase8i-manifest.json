@@ -1,0 +1,59 @@
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "8I",
+  "name": "capability-negotiation",
+  "version": "1.0.0",
+  "status": "validated",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "fingerprint": "8a0cf45467dff43a76586033363561b643d6fa3c814f45e2a5fbd5ad61473e23",
+  "capability_schema": "dnyf.capability.negotiation.v1",
+  "protocol": "dnyf-capability/1",
+  "security": {
+    "authenticated_exchange_required": true,
+    "proof_of_possession_required": true,
+    "capability_exchange_grants_trust": false,
+    "capability_exchange_grants_authorization": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false
+  },
+  "network": {
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true,
+    "ipv4": true,
+    "ipv6": true
+  },
+  "features": [
+    "canonical-capability-offer",
+    "capability-fingerprint",
+    "protocol-negotiation",
+    "api-version-negotiation",
+    "transport-negotiation",
+    "platform-compatibility",
+    "architecture-compatibility",
+    "service-capability-intersection",
+    "workload-capability-intersection",
+    "resource-negotiation",
+    "required-vs-optional-capabilities",
+    "incompatibility-reasons",
+    "graceful-downgrade",
+    "peer-capability-cache",
+    "capability-expiry",
+    "authenticated-capability-contract",
+    "trust-separation"
+  ],
+  "artifacts": {
+    "schema": "/data/data/com.termux/files/home/DNYF-DEV/etc/dnyf/capability/dnyf-capability-negotiation-schema.json",
+    "policy": "/data/data/com.termux/files/home/DNYF-DEV/etc/dnyf/capability/dnyf-capability-negotiation-policy.json",
+    "runtime": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/capability/dnyf-capability-negotiation.js",
+    "cli": "/data/data/com.termux/files/home/DNYF-DEV/bin/dnyf-capability",
+    "local_offer": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/capability/local-capability-offer.json",
+    "local_state": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/capability/local-capability-state.json"
+  },
+  "completed_at": "2026-09-07T11:21:56Z"
+}

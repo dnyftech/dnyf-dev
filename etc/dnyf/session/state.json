@@ -1,0 +1,9 @@
+{
+  "schema": "dnyf.session.state.v1",
+  "storage": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/session",
+  "replay_file": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/session/replay-nonces.json",
+  "revocation_file": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/session/revoked-sessions.json",
+  "restart_safe": true,
+  "persistent_replay_protection": true,
+  "persistent_revocation": true
+}
