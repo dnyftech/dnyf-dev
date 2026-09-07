@@ -1,0 +1,40 @@
+{
+  "schema": "dnyf.phase9d.manifest.v1",
+  "phase": "9D",
+  "name": "DNYF Audit/Security Ledger",
+  "version": "1.0.0",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "protocol": "dnyf-audit-ledger/1",
+  "dependencies": [
+    "phase8e",
+    "phase8f",
+    "phase8g",
+    "phase8h",
+    "phase8i",
+    "phase8j",
+    "phase9a",
+    "phase9b",
+    "phase9c"
+  ],
+  "artifacts": {
+    "schema": "/data/data/com.termux/files/home/DNYF-DEV/etc/dnyf/audit-ledger/dnyf-audit-security-ledger-schema.json",
+    "policy": "/data/data/com.termux/files/home/DNYF-DEV/etc/dnyf/audit-ledger/dnyf-audit-security-ledger-policy.json",
+    "authority": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/runtime/audit-ledger/dnyf-audit-security-ledger-authority.js",
+    "cli": "/data/data/com.termux/files/home/DNYF-DEV/bin/dnyf-audit",
+    "registry": "/data/data/com.termux/files/home/DNYF-DEV/registry/dnyf-audit-security-ledger-registry.json",
+    "ledger": "/data/data/com.termux/files/home/DNYF-DEV/opt/dnyf/state/audit-ledger/ledger/dnyf-security-audit-ledger.jsonl"
+  },
+  "security": {
+    "append_only": true,
+    "record_signature": "Ed25519",
+    "record_hash": "SHA-256",
+    "chain_hash": "SHA-256",
+    "normal_delete": false,
+    "trust_grant": false,
+    "authorization_grant": false,
+    "execution_grant": false,
+    "installation_grant": false,
+    "shell_grant": false,
+    "privilege_escalation": false
+  }
+}

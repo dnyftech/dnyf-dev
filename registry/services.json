@@ -104,6 +104,28 @@
       "name": "dnyf-sync",
       "port": 9445,
       "transport": "tcp"
+    },
+    {
+      "service": "dnyf-audit-ledger",
+      "protocol": "dnyf-audit-ledger/1",
+      "version": "1.0.0",
+      "port": null,
+      "transport": [
+        "local-process",
+        "http",
+        "https"
+      ],
+      "status": "registered",
+      "security": {
+        "append_authorization_required": true,
+        "signed_records": true,
+        "hash_chain": true,
+        "trust_grant": false,
+        "authorization_grant": false,
+        "execution": false,
+        "installation": false,
+        "shell": false
+      }
     }
   ]
 }

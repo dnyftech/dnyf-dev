@@ -1,0 +1,47 @@
+{
+  "schema": "dnyf.audit.security.ledger.policy.v1",
+  "protocol": "dnyf-audit-ledger/1",
+  "version": "1.0.0",
+  "default": "deny",
+  "security": {
+    "append_requires_identity": true,
+    "append_requires_authority": true,
+    "record_signatures_required": true,
+    "chain_integrity_required": true,
+    "duplicate_sequence_denied": true,
+    "sequence_regression_denied": true,
+    "unauthorized_append_denied": true,
+    "normal_delete_disabled": true,
+    "trust_grant": false,
+    "authorization_grant": false,
+    "execution_grant": false,
+    "installation_grant": false,
+    "shell_grant": false,
+    "privilege_escalation": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  },
+  "allowed_severity": [
+    "debug",
+    "info",
+    "notice",
+    "warning",
+    "error",
+    "critical"
+  ],
+  "correlation": {
+    "policy_decision": "9b",
+    "event_bus_event": "9c",
+    "session": "8g",
+    "device_registry": "8h",
+    "capability": "8i",
+    "service_discovery": "8j",
+    "api_gateway": "9a"
+  },
+  "archive": {
+    "enabled": true,
+    "anchor_required": true,
+    "destructive_rotation_disabled": true
+  }
+}

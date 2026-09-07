@@ -1,0 +1,37 @@
+{
+  "schema": "dnyf.audit.security.ledger.registry.v1",
+  "service": "dnyf-audit-ledger",
+  "device_id": "cbd06be57a51cb84e12b4e112a4d06e9",
+  "protocol": "dnyf-audit-ledger/1",
+  "version": "1.0.0",
+  "transport": [
+    "local-process",
+    "http",
+    "https"
+  ],
+  "capabilities": [
+    "signed-audit-records",
+    "sha256-chain",
+    "sequence-integrity",
+    "tamper-detection",
+    "policy-correlation",
+    "event-correlation",
+    "session-correlation",
+    "persistent-ledger",
+    "archive-anchors"
+  ],
+  "security": {
+    "append_authorization_required": true,
+    "cryptographic_signature_required": true,
+    "normal_delete": false,
+    "trust_grant": false,
+    "authorization_grant": false,
+    "execution_grant": false,
+    "installation_grant": false,
+    "shell_grant": false,
+    "privilege_escalation": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false
+  }
+}

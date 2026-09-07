@@ -1,0 +1,41 @@
+{
+  "schema": "dnyf.audit.security.ledger.schema.v1",
+  "protocol": "dnyf-audit-ledger/1",
+  "version": "1.0.0",
+  "record": {
+    "required": [
+      "schema",
+      "ledger",
+      "ledger_sequence",
+      "record_id",
+      "timestamp",
+      "event_type",
+      "severity",
+      "source",
+      "device_id",
+      "service",
+      "correlation",
+      "payload",
+      "previous_hash",
+      "record_hash",
+      "signature"
+    ]
+  },
+  "integrity": {
+    "hash": "SHA-256",
+    "signature": "Ed25519",
+    "canonicalization": "deterministic-json",
+    "chain_field": "previous_hash"
+  },
+  "ordering": {
+    "sequence": "strict-monotonic",
+    "duplicate_sequence": "deny",
+    "regression": "deny"
+  },
+  "retention": {
+    "append_only": true,
+    "normal_delete_api": false,
+    "archive_supported": true,
+    "anchor_required_for_archive": true
+  }
+}
