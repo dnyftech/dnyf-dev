@@ -1,0 +1,41 @@
+{
+  "schema": "dnyf.phase.manifest.v1",
+  "phase": "10",
+  "name": "DNYF Distributed Task Runtime",
+  "protocol": "dnyf-task-runtime/1",
+  "version": "1.0.0",
+  "dependencies": [
+    "phase-8h-device-registry",
+    "phase-8i-capability-negotiation",
+    "phase-8j-service-discovery",
+    "phase-9a-api-gateway",
+    "phase-9b-policy-engine",
+    "phase-9c-event-bus",
+    "phase-9d-audit-security-ledger"
+  ],
+  "execution": {
+    "enabled": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  },
+  "features": [
+    "task-schema",
+    "task-state-machine",
+    "persistent-queue",
+    "scheduler",
+    "capability-aware-placement",
+    "device-aware-placement",
+    "service-aware-placement",
+    "resource-aware-placement",
+    "idempotency",
+    "retry-backoff",
+    "dead-letter",
+    "cancellation",
+    "timeout",
+    "restart-recovery",
+    "event-correlation",
+    "audit-correlation"
+  ]
+}

@@ -126,6 +126,23 @@
         "installation": false,
         "shell": false
       }
+    },
+    {
+      "name": "dnyf-distributed-task-runtime",
+      "protocol": "dnyf-task-runtime/1",
+      "version": "1.0.0",
+      "status": "registered",
+      "transport": [
+        "local-process",
+        "http",
+        "https",
+        "websocket"
+      ],
+      "execution_enabled": false,
+      "remote_execution": false,
+      "remote_installation": false,
+      "remote_shell": false,
+      "privilege_escalation": false
     }
   ]
 }

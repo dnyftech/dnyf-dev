@@ -1,0 +1,59 @@
+{
+  "schema": "dnyf.task.runtime.policy.v1",
+  "protocol": "dnyf-task-runtime/1",
+  "version": "1.0.0",
+  "defaults": {
+    "authorization": "deny",
+    "execution": "disabled",
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  },
+  "security": {
+    "cryptographic_authentication_required": true,
+    "authenticated_session_required": true,
+    "policy_engine_required": true,
+    "capability_validation_required": true,
+    "device_registry_required": true,
+    "service_discovery_required": true,
+    "event_bus_required": true,
+    "audit_ledger_required": true,
+    "local_approval_required": true,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false
+  },
+  "dangerous_operations": [
+    "execute",
+    "shell",
+    "install",
+    "uninstall",
+    "privilege",
+    "sudo",
+    "su",
+    "kernel",
+    "raw-device"
+  ],
+  "limits": {
+    "max_retry_count": 5,
+    "max_queue_depth": 1024,
+    "max_task_age_seconds": 86400,
+    "default_timeout_seconds": 300,
+    "max_timeout_seconds": 3600,
+    "max_payload_bytes": 1048576
+  },
+  "placement": {
+    "prefer_local": true,
+    "prefer_lan": true,
+    "require_capability_match": true,
+    "require_fresh_capability": true,
+    "require_trusted_device": true,
+    "require_authorized_session": true
+  }
+}

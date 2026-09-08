@@ -1,0 +1,51 @@
+{
+  "schema": "dnyf.distributed.task.runtime.registry.v1",
+  "service": "dnyf-distributed-task-runtime",
+  "protocol": "dnyf-task-runtime/1",
+  "version": "1.0.0",
+  "cli": "dnyf-task",
+  "runtime": "opt/dnyf/runtime/task-runtime/dnyf-distributed-task-runtime-authority.js",
+  "schema_file": "etc/dnyf/task-runtime/dnyf-distributed-task-runtime-schema.json",
+  "policy_file": "etc/dnyf/task-runtime/dnyf-distributed-task-runtime-policy.json",
+  "state_directory": "opt/dnyf/state/task-runtime",
+  "capabilities": [
+    "task-creation",
+    "task-validation",
+    "task-queueing",
+    "task-scheduling",
+    "capability-aware-placement",
+    "device-aware-placement",
+    "service-aware-placement",
+    "retry",
+    "dead-letter",
+    "cancellation",
+    "timeout",
+    "restart-recovery",
+    "idempotency",
+    "event-correlation",
+    "audit-correlation"
+  ],
+  "security": {
+    "execution_enabled": false,
+    "remote_execution": false,
+    "remote_installation": false,
+    "remote_shell": false,
+    "privilege_escalation": false,
+    "self_trust": false,
+    "self_pairing": false,
+    "automatic_trust": false,
+    "automatic_pairing": false,
+    "trust_grant": false,
+    "authorization_grant": false,
+    "policy_bypass": false
+  },
+  "dependencies": {
+    "device_registry": "phase-8h",
+    "capability_negotiation": "phase-8i",
+    "service_discovery": "phase-8j",
+    "api_gateway": "phase-9a",
+    "policy_engine": "phase-9b",
+    "event_bus": "phase-9c",
+    "audit_security_ledger": "phase-9d"
+  }
+}

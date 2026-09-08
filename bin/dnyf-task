@@ -1,0 +1,153 @@
+#!/data/data/com.termux/files/usr/bin/node
+
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+
+const ROOT =
+  process.env.DNYF_ROOT &&
+  process.env.DNYF_ROOT.endsWith('/DNYF-DEV')
+    ? process.env.DNYF_ROOT
+    : path.resolve(
+        __dirname,
+        '..'
+      );
+
+const AUTHORITY =
+  path.join(
+    ROOT,
+    'opt/dnyf/runtime/task-runtime',
+    'dnyf-distributed-task-runtime-authority.js'
+  );
+
+if (!fs.existsSync(AUTHORITY)) {
+  console.error(
+    `[DNYF] Task runtime authority not found: ${AUTHORITY}`
+  );
+  process.exit(1);
+}
+
+const runtime =
+  require(AUTHORITY);
+
+const command =
+  process.argv[2] || 'status';
+
+function inputJson(argument) {
+  if (!argument) {
+    throw new Error(
+      'JSON argument required'
+    );
+  }
+
+  return JSON.parse(argument);
+}
+
+function print(value) {
+  if (
+    typeof value === 'string'
+  ) {
+    console.log(value);
+    return;
+  }
+
+  console.log(
+    JSON.stringify(
+      value,
+      null,
+      2
+    )
+  );
+}
+
+try {
+  switch (command) {
+    case 'status':
+      print(runtime.status());
+      break;
+
+    case 'schema':
+      print(runtime.loadSchema());
+      break;
+
+    case 'policy':
+      print(runtime.loadPolicy());
+      break;
+
+    case 'fingerprint': {
+      const schema =
+        runtime.loadSchema();
+
+      const policy =
+        runtime.loadPolicy();
+
+      print({
+        schema:
+          'dnyf.task.runtime.fingerprint.v1',
+        schema_sha256:
+          runtime.sha256(schema),
+        policy_sha256:
+          runtime.sha256(policy),
+        authority:
+          'dnyf-distributed-task-runtime/1'
+      });
+      break;
+    }
+
+    case 'test':
+      print(runtime.test());
+      break;
+
+    case 'verify':
+      print(runtime.verifyJournal());
+      break;
+
+    case 'create':
+      print(
+        runtime.buildTask(
+          inputJson(
+            process.argv[3]
+          )
+        )
+      );
+      break;
+
+    case 'enqueue':
+      print(
+        runtime.enqueue(
+          runtime.buildTask(
+            inputJson(
+              process.argv[3]
+            )
+          )
+        )
+      );
+      break;
+
+    default:
+      console.error(
+        [
+          'DNYF Distributed Task Runtime',
+          '',
+          'Usage:',
+          '  dnyf-task status',
+          '  dnyf-task schema',
+          '  dnyf-task policy',
+          '  dnyf-task fingerprint',
+          '  dnyf-task test',
+          '  dnyf-task verify',
+          '  dnyf-task create <json>',
+          '  dnyf-task enqueue <json>'
+        ].join('\n')
+      );
+
+      process.exit(2);
+  }
+} catch (error) {
+  console.error(
+    `[DNYF] ${error.message}`
+  );
+
+  process.exit(1);
+}

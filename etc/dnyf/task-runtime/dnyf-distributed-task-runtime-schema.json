@@ -1,0 +1,71 @@
+{
+  "schema": "dnyf.task.runtime.schema.v1",
+  "protocol": "dnyf-task-runtime/1",
+  "version": "1.0.0",
+  "task": {
+    "required": [
+      "task_id",
+      "created_at",
+      "source_device_id",
+      "operation",
+      "priority",
+      "state"
+    ],
+    "states": [
+      "created",
+      "queued",
+      "scheduled",
+      "authorized",
+      "dispatched",
+      "running",
+      "completed",
+      "failed",
+      "retry_wait",
+      "cancelled",
+      "expired",
+      "dead_letter"
+    ]
+  },
+  "correlation": {
+    "required": [
+      "task_id"
+    ],
+    "optional": [
+      "parent_task_id",
+      "request_id",
+      "event_id",
+      "session_id",
+      "policy_decision_id",
+      "audit_record_id"
+    ]
+  },
+  "routing": {
+    "selection": [
+      "device",
+      "service",
+      "capability",
+      "resource"
+    ],
+    "ordering": [
+      "explicit_device",
+      "capability_match",
+      "service_match",
+      "resource_fit",
+      "local_preference"
+    ]
+  },
+  "transport": [
+    "local-process",
+    "http",
+    "https",
+    "websocket"
+  ],
+  "network": {
+    "ipv4": true,
+    "ipv6": true,
+    "offline_first": true,
+    "lan_preferred": true,
+    "internet_fallback": true,
+    "relay_fallback": true
+  }
+}
